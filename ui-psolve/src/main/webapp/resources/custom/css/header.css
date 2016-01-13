@@ -1,0 +1,19 @@
+.link-button {
+ display: block;
+ width: 100%;
+ padding: 3px 20px;
+ clear: both;
+ color: #333;
+ white-space: nowrap;
+ background-color: transparent;
+ border: none;
+ text-align: left;
+}
+
+.link-button:hover {
+ background-color: #f5f5f5;
+}
+
+.badger-brand {
+	padding-right: 10px;
+}

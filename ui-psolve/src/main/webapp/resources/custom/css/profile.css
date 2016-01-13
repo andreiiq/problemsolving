@@ -1,0 +1,103 @@
+body {
+	background-color:#ecf0f1;
+}
+.levelContainer {
+	color: #000000;
+}
+#profile-img {
+	width: 173.91304px;
+	height: 173.91304px;;
+	background-position: center center;
+	background-repeat: no-repeat;
+	z-index: 700;
+	border-radius: 50px;
+	-webkit-border-radius: 150px;
+	-moz-border-radius: 150;
+}
+
+.user-actions li {
+    list-style: none;
+    text-align: center;
+    background-color: #000000;
+    margin-right: 30px;
+    width: 400px;
+    line-height: 60px;
+	border-radius: 25px;
+    border: 2px solid #6db33f;}
+
+.user-actions li a{
+    text-decoration: none;
+    color: #FFFFFF;
+    display: block;
+}
+ 
+.user-actions li a:hover {
+    text-decoration: none;
+    color: #000000;
+    background-color: #6db33f;
+	border-radius: 26px;
+    border: 3px solid #6db33f;
+}
+.activity-container {
+	border-radius: 25px;
+    border: 2px solid #6db33f;
+}
+.badges-list {
+	display:inline;
+}
+.user-information li {
+	list-style-type: none;
+}
+.activity-content {
+border: 2px solid #6db33f;
+border-top-left-radius:14px;
+border-top-right-radius:15px;
+border-bottom-left-radius:16px;
+border-bottom-right-radius:15px;
+}
+
+.awarded-badge:hover {
+	border: 2px solid #337ab7;
+	cursor:pointer;
+}
+
+.awarded-badge {
+	/* [disabled]border: 2px solid #ddd; */
+}
+.badge-wraper {
+	margin: 10px;
+	margin-right: 4px;
+	width: 100px;
+	height: 100px;
+}
+.post-comment {
+	margin-bottom: 10px;
+}
+.content-subtitle {
+	color:#337ab7;
+	font-weight: 700;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 18px;
+    line-height: 1.42857143
+}
+.classroom-button:hover{
+	border: 2px solid #337ab7;
+}
+
+.classroom-button {
+	border: 2px solid transparent;
+}
+.badges-table-wraper {
+	max-height:250px;
+}
+
+.progress {
+    position: relative;
+}
+
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+ }
+
