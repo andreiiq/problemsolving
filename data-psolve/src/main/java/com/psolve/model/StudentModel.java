@@ -8,9 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity
-public class Teacher {
+public class StudentModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,8 +29,20 @@ public class Teacher {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@OneToMany(mappedBy = "teacher")
-	private List<Task> ownedTasks;
+	@Column(name = "education")
+	private String education;
+
+	@Column(name = "profile_image_path")
+	private String profileImagePath;
+
+	@Transient
+	private byte[] profileImage;
+
+	@Column(name = "skypeID")
+	private String skypeID;
+
+	@OneToMany
+	private List<CoursePointsModel> points;
 
 	public Long getId() {
 		return id;
@@ -71,12 +84,44 @@ public class Teacher {
 		this.password = password;
 	}
 
-	public List<Task> getOwnedTasks() {
-		return ownedTasks;
+	public String getEducation() {
+		return education;
 	}
 
-	public void setOwnedTasks(List<Task> ownedTasks) {
-		this.ownedTasks = ownedTasks;
+	public void setEducation(String education) {
+		this.education = education;
+	}
+
+	public String getProfileImagePath() {
+		return profileImagePath;
+	}
+
+	public void setProfileImagePath(String profileImagePath) {
+		this.profileImagePath = profileImagePath;
+	}
+
+	public byte[] getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(byte[] profileImage) {
+		this.profileImage = profileImage;
+	}
+
+	public String getSkypeID() {
+		return skypeID;
+	}
+
+	public void setSkypeID(String skypeID) {
+		this.skypeID = skypeID;
+	}
+
+	public List<CoursePointsModel> getPoints() {
+		return points;
+	}
+
+	public void setPoints(List<CoursePointsModel> points) {
+		this.points = points;
 	}
 	
 	

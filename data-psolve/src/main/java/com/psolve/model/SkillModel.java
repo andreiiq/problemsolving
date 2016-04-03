@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Skill {
+public class SkillModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,8 +19,8 @@ public class Skill {
 	private double experience;
 	
 	@ManyToOne
-	@JoinColumn(name="level")
-	private Level level;
+	@JoinColumn(name="levelModel")
+	private LevelModel levelModel;
 
 	public Long getId() {
 		return id;
@@ -38,12 +38,12 @@ public class Skill {
 		this.experience = experience;
 	}
 
-	public Level getLevel() {
-		return level;
+	public LevelModel getLevelModel() {
+		return levelModel;
 	}
 
-	public void setLevel(Level level) {
-		this.level = level;
+	public void setLevelModel(LevelModel levelModel) {
+		this.levelModel = levelModel;
 	}
 	
 	

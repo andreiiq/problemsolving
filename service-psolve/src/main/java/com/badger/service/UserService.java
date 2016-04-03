@@ -4,16 +4,16 @@ import java.io.InputStream;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.psolve.model.Student;
+import com.psolve.model.StudentModel;
 
 public interface UserService extends UserDetailsService {
-	Student findUserByID(String id);
+	StudentModel findUserByID(String id);
 
-	Student findUserByEmail(String email);
+	StudentModel findUserByEmail(String email);
 
-	void saveUser(Student buser);
+	void saveUser(StudentModel buser);
 
-	byte[] getProfileImage(Student buser);
+	byte[] getProfileImage(StudentModel buser);
 
-	void setProfileImage(Student buser, InputStream profileImage);
+	void setProfileImage(StudentModel buser, InputStream profileImage);
 }

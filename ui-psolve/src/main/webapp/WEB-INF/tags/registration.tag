@@ -17,7 +17,7 @@
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title" id="registrationModalLabel">Registration</h4>
+				<h4 class="modal-name" id="registrationModalLabel">Registration</h4>
 			</div>
 			<c:url value="/register" var="registerURL" />
 			<form:form enctype="multipart/form-data" class="form-register"

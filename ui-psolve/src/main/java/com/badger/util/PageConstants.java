@@ -16,4 +16,6 @@ public interface PageConstants {
 
 	String HEADER = "pages/common/header";
 	String FOOTER = "pages/common/footer";
+	String TEAHCER_ADMINISTRATION = "pages/teacherPage";
+	String PROJECT_CREATE_FORM= "pages/createProject";
 }

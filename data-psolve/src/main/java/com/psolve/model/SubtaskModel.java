@@ -12,63 +12,63 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
-public class Subtask extends AbstractTask {
+public class SubtaskModel extends AbstractTaskModel {
 	@ManyToOne
 	@JoinColumn(name = "subtasks")
-	private Task parentTask;
+	private TaskModel parentTask;
 
 	@OneToOne
-	private Skill skillGained;
+	private SkillModel skillModelGained;
 
 	@OneToMany
-	private List<Level> levelsRequired;
+	private List<LevelModel> levelsRequired;
 
 	@OneToOne
-	private Student student;
+	private StudentModel studentModel;
 
 	@OneToOne
-	private Student tutor;
+	private StudentModel tutor;
 
 	@Column(name = "pointsRewarded")
 	private double pointsRewarded;
 
-	public Task getParentTask() {
+	public TaskModel getParentTask() {
 		return parentTask;
 	}
 
-	public void setParentTask(Task parentTask) {
+	public void setParentTask(TaskModel parentTask) {
 		this.parentTask = parentTask;
 	}
 
-	public Skill getSkillGained() {
-		return skillGained;
+	public SkillModel getSkillModelGained() {
+		return skillModelGained;
 	}
 
-	public void setSkillGained(Skill skillGained) {
-		this.skillGained = skillGained;
+	public void setSkillModelGained(SkillModel skillModelGained) {
+		this.skillModelGained = skillModelGained;
 	}
 
-	public List<Level> getLevelsRequired() {
+	public List<LevelModel> getLevelsRequired() {
 		return levelsRequired;
 	}
 
-	public void setLevelsRequired(List<Level> levelsRequired) {
+	public void setLevelsRequired(List<LevelModel> levelsRequired) {
 		this.levelsRequired = levelsRequired;
 	}
 
-	public Student getStudent() {
-		return student;
+	public StudentModel getStudentModel() {
+		return studentModel;
 	}
 
-	public void setStudent(Student student) {
-		this.student = student;
+	public void setStudentModel(StudentModel studentModel) {
+		this.studentModel = studentModel;
 	}
 
-	public Student getTutor() {
+	public StudentModel getTutor() {
 		return tutor;
 	}
 
-	public void setTutor(Student tutor) {
+	public void setTutor(StudentModel tutor) {
 		this.tutor = tutor;
 	}
 

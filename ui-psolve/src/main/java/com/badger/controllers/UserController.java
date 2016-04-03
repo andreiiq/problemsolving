@@ -1,7 +1,6 @@
 package com.badger.controllers;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,17 +14,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.badger.form.UserDetails;
 import com.badger.service.UserService;
-import com.badger.util.GameConstants;
 import com.badger.util.MVCConstants;
 import com.badger.util.PageConstants;
-import com.psolve.model.Student;
+import com.psolve.model.StudentModel;
 
 /**
  * Controller which intercepts request related to the user.
@@ -58,6 +55,11 @@ public class UserController {
 	public String getLoginPage() {
 		return PageConstants.LOGIN_PAGE;
 	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String getHomepage() {
+		return PageConstants.PROFILE_PAGE;
+	}
 
 	/**
 	 * Method which intercepts the register request and persists the user.
@@ -72,7 +74,7 @@ public class UserController {
 			throws IOException {
 
 
-		Student buser = new Student();
+		StudentModel buser = new StudentModel();
 		buser.setEmail(userDetails.getEmail());
 		buser.setPassword(userDetails.getPassword());
 		buser.setFirstname(userDetails.getFirstname());
@@ -87,7 +89,7 @@ public class UserController {
 		return MVCConstants.REDIRECT + MVCConstants.WILD_PATH;
 	}
 
-	private void authenticateUserAndSetSession(Student buser, HttpServletRequest request) {
+	private void authenticateUserAndSetSession(StudentModel buser, HttpServletRequest request) {
 		String username = buser.getEmail();
 		String password = buser.getPassword();
 		org.springframework.security.core.userdetails.UserDetails userDetails = userService

@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 
 @Entity
-public class CoursePoints {
+public class CoursePointsModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -19,8 +19,8 @@ public class CoursePoints {
 	private double points;
 
 	@ManyToOne
-	@JoinColumn(name = "course")
-	private Course course;
+	@JoinColumn(name = "courseModel")
+	private CourseModel courseModel;
 
 	public Long getId() {
 		return id;
@@ -38,11 +38,11 @@ public class CoursePoints {
 		this.points = points;
 	}
 
-	public Course getCourse() {
-		return course;
+	public CourseModel getCourseModel() {
+		return courseModel;
 	}
 
-	public void setCourse(Course course) {
-		this.course = course;
+	public void setCourseModel(CourseModel courseModel) {
+		this.courseModel = courseModel;
 	}
 }

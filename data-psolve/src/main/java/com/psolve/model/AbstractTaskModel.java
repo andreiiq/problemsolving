@@ -14,13 +14,13 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AbstractTask {
+public abstract class AbstractTaskModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "title", nullable = false)
-	private String titles;
+	private String title;
 
 	@Column(name = "description")
 	private String description;
@@ -37,12 +37,12 @@ public abstract class AbstractTask {
 		this.id = id;
 	}
 
-	public String getTitles() {
-		return titles;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setTitles(String titles) {
-		this.titles = titles;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getDescription() {

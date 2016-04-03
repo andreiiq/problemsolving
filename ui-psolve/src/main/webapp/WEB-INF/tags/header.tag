@@ -11,26 +11,19 @@
 </head>
 <nav class="navbar navbar-default col-lg-6 col-lg-offset-3">
 <div class="container-fluid">
-	<!-- Brand and toggle get grouped for better mobile display -->
 	<div class="navbar-header">
-		<button type="button" class="navbar-toggle collapsed"
-			data-toggle="collapse" data-target="#defaultNavbar1">
-			<span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
-				class="icon-bar"></span><span class="icon-bar"></span>
-		</button>
-		<a class="navbar-brand badger-brand" href=<c:url value="/"/>>Badger</a>
+		<a class="navbar-brand badger-brand" href="#"/>PBS</a>
 	</div>
-	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse" id="defaultNavbar1">
 		<form class="navbar-form navbar-left form form-vertical" role="search">
 			<div class="form-group">
-				<input type="text" class="form-control"
+				<input id="header-search" type="text" class="form-control"
 					placeholder="Search for everything">
-			</div>
 			<button type="submit" class="btn btn-default">
-				<span class="glyphicon glyphicon-search" style="color: green"
+				<span class="glyphicon glyphicon-search" style="color: #5bc0de"
 					aria-hidden="true"></span>
 			</button>
+			</div>
 		</form>
 		<ul class="nav navbar-nav navbar-right">
 			<li><a href="#">About us</a></li>
@@ -47,11 +40,6 @@
 					<button class="link-button" type="submit">Logout</input>
 					</form:form></li>
 				</ul></li>
-			<c:url value="/profile" var="profileURL" />
-			<c:url value="/profile-image" var="profileImageURL" />
-			<li><a class="navbar-brand" rel="home" href="${profileURL}"> <img
-					style="max-width: 35px; margin-top: -7px;" src="${profileImageURL}">
-			</a></li>
 		</ul>
 	</div>
 </div>

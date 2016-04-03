@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-	<security:http pattern="/resources/**" security="none" />
-	<security:http pattern="/register" security="none" />
-	<security:http pattern="/error/**" security="none" />
+    <security:http pattern="/resources/**" security="none" />
+    <security:http pattern="/register" security="none" />
+    <security:http pattern="/error/**" security="none" />
 
-	<security:http>
-		<security:intercept-url pattern="/login"
-			access="hasRole('ANONYMOUS')" />
-		<security:intercept-url pattern="/**"
-			access="hasRole('ROLE_USER')" />
-		<security:form-login login-page="/login"
-			login-processing-url="/j_spring_security_check" default-target-url="/"
-			always-use-default-target="true"/>
-		<security:logout logout-url="/logout" />
-	</security:http>
+    <security:http>
+        <security:intercept-url pattern="/login"
+                                access="hasRole('ANONYMOUS')" />
+        <security:intercept-url pattern="/**"
+                                access="hasRole('ROLE_USER')" />
+        <security:intercept-url pattern="/teacher/**"
+                                access="hasRole('ROLE_ADMIN')" />
+        <security:form-login login-page="/login"
+                             login-processing-url="/j_spring_security_check" default-target-url="/"
+                             always-use-default-target="true"/>
+        <security:logout logout-url="/logout" />
+    </security:http>
 
-	<security:authentication-manager alias="authenticationManager">
-		<security:authentication-provider
-			ref="DBAuthenticationProvider">
-		</security:authentication-provider>
-	</security:authentication-manager>
+    <security:authentication-manager alias="authenticationManager">
+        <!--<security:authentication-provider-->
+                <!--ref="DBAuthenticationProvider">-->
+        <security:authentication-provider>
+            <security:user-service>
+                <security:user name="admin" password="123" authorities="ROLE_USER" />
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
 
 </beans>

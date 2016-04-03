@@ -1,9 +1,8 @@
 package com.psolve.dao;
 
+import com.psolve.model.TaskModel;
 import org.springframework.data.repository.CrudRepository;
 
-import com.psolve.model.Student;
-
-public interface TaskDao extends CrudRepository<Student, Long> {
+public interface TaskDao extends CrudRepository<TaskModel, Long> {
 
 }

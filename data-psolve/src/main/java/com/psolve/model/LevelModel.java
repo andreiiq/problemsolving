@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Level {
+public class LevelModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -22,14 +22,14 @@ public class Level {
 	@Column(name = "xp_needed")
 	private Long xpNeeded;
 
-	@Column(name = "title")
-	private String title;
+	@Column(name = "name")
+	private String name;
 
 	@Column(name = "capped")
 	private Boolean capped;
 
 	@OneToOne
-	private Level nextLevel;
+	private LevelModel nextLevelModel;
 
 	public Long getId() {
 		return id;
@@ -55,12 +55,12 @@ public class Level {
 		this.xpNeeded = xpNeeded;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Boolean getCapped() {
@@ -71,11 +71,11 @@ public class Level {
 		this.capped = capped;
 	}
 
-	public Level getNextLevel() {
-		return nextLevel;
+	public LevelModel getNextLevelModel() {
+		return nextLevelModel;
 	}
 
-	public void setNextLevel(Level nextLevel) {
-		this.nextLevel = nextLevel;
+	public void setNextLevelModel(LevelModel nextLevelModel) {
+		this.nextLevelModel = nextLevelModel;
 	}
 }

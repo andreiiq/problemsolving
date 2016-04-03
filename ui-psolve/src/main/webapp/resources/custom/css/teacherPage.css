@@ -1,0 +1,72 @@
+
+.btn-circle {
+  width: 49px;
+  height: 49px;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 20px;
+  line-height: 2.00;
+  border-radius: 30px;
+}
+.btn-circle-sm {
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  padding: 2px 0;
+  font-size: 20px;
+  line-height: 1.65;
+  border-radius: 30px;
+}
+
+
+.subtask-btn{
+    position:absolute;
+    right:2px;
+    top:2px;
+}
+.panel-heading{
+    position:relative;
+}
+
+.pbs-serach-glyph {
+	font-size: 1.5em;
+	color: 	#5bc0de;
+}
+
+
+.post-comment {
+	margin-bottom: 10px;
+}
+.content-subtitle {
+	color:#337ab7;
+	font-weight: 700;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 18px;
+    line-height: 1.42857143
+}
+.project-button:hover{
+	border: 2px solid black;
+	background-color: #337ab7;
+	color: white;
+	cursor: pointer;
+}
+
+.project-button {
+	border: 2px solid transparent;
+}
+
+.blue-header.panel-heading {
+	background-color: #337ab7;
+	color: white;
+}
+
+
+.solution {
+	margin: 10px;
+	margin-right: 4px;
+	width: 100px;
+	height: 100px;
+}
+.img-thumbnail.solution-img:HOVER {
+ 	background-color: #337ab7;
+}

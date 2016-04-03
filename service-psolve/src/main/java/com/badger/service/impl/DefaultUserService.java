@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.badger.service.UserService;
 import com.badger.util.BuserFileManager;
 import com.psolve.dao.StudentDAO;
-import com.psolve.model.Student;
+import com.psolve.model.StudentModel;
 
 @Service
 public class DefaultUserService implements UserService {
@@ -31,14 +31,14 @@ public class DefaultUserService implements UserService {
 
 	@Override
 	@Transactional
-	public Student findUserByID(String id) {
+	public StudentModel findUserByID(String id) {
 		long userCode = findUserCode(id);
 		return userDAO.findOne(userCode);
 	}
 
 	@Override
 	@Transactional
-	public Student findUserByEmail(String email) {
+	public StudentModel findUserByEmail(String email) {
 		return userDAO.findByEmail(email);
 	}
 
@@ -49,7 +49,7 @@ public class DefaultUserService implements UserService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Student user = userDAO.findByEmail(email);
+		StudentModel user = userDAO.findByEmail(email);
 		if (user == null) {
 			logger.warn("User not in the database: " + email);
 			throw new UsernameNotFoundException("Username is not in the DB");
@@ -64,12 +64,12 @@ public class DefaultUserService implements UserService {
 	}
 
 	@Override
-	public void saveUser(Student buser) {
+	public void saveUser(StudentModel buser) {
 		userDAO.save(buser);
 	}
 
 	@Override
-	public byte[] getProfileImage(Student buser) {
+	public byte[] getProfileImage(StudentModel buser) {
 		try {
 			return fileManager.getBuserProfileImage(buser);
 		} catch (IOException ioe) {
@@ -79,7 +79,7 @@ public class DefaultUserService implements UserService {
 	}
 
 	@Override
-	public void setProfileImage(Student buser, InputStream profileImage) {
+	public void setProfileImage(StudentModel buser, InputStream profileImage) {
 		fileManager.saveBuserProfileImage(buser, profileImage);
 	}
 

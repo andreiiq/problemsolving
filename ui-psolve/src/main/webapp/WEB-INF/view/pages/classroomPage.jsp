@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Badger</title>
+<name>Badger</name>
 <!-- Bootstrap -->
 <link href="<c:url value="/resources/web/css/bootstrap.css"/>"
 	rel="stylesheet">
@@ -39,9 +39,9 @@
 			<div class="col-lg-12 ">
 				<h3>Courses</h3>
 			</div>
-			<c:forEach items="${classroomCourses}" var="course">
+			<c:forEach items="${classroomCourses}" var="courseModel">
 				<div class="col-lg-12">
-					<a href="/badger/classroom/${classroom.id}/${course.id}">${course.name}</a>
+					<a href="/badger/classroom/${classroom.id}/${courseModel.id}">${courseModel.name}</a>
 				</div>
 			</c:forEach>
 			<hr>

@@ -5,6 +5,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
-public class MentoringLevel extends Level {
+public class MentoringLevel extends LevelModel {
 
 }

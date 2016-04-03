@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.badger.service.impl.DefaultUserService;
-import com.psolve.model.Student;
+import com.psolve.model.StudentModel;
 
 @Component
 public class BuserFileManager {
@@ -30,16 +29,16 @@ public class BuserFileManager {
 	@Value("#{'${file.base_path}' + '${file.profile_image_path}'}")
 	private String buserImagePath;
 
-	public void buildBuserProfileImagePath(Student buser) {
+	public void buildBuserProfileImagePath(StudentModel buser) {
 		buser.setProfileImagePath(buserImagePath + "\\" + buser.getEmail() + "." + PROFILE_IMG_FORMAT);
 	}
 
-	public byte[] getBuserProfileImage(Student buser) throws IOException {
+	public byte[] getBuserProfileImage(StudentModel buser) throws IOException {
 		Path imagePath = Paths.get(buser.getProfileImagePath() + "." + PROFILE_IMG_FORMAT );
 		return Files.readAllBytes(imagePath);
 	}
 
-	public void saveBuserProfileImage(Student buser, InputStream profileImage) {
+	public void saveBuserProfileImage(StudentModel buser, InputStream profileImage) {
 		buildBuserProfileImagePath(buser);
 		try {
 			BufferedImage bufferedImage = ImageIO.read(profileImage);

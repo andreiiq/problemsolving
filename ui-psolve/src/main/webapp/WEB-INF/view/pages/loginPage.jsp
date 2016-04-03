@@ -8,7 +8,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Badger</title>
+<name>Badger</name>
 <!-- Bootstrap -->
 <link href="<c:url value="/resources/web/css/bootstrap.css"/>"
 	rel="stylesheet">
@@ -27,7 +27,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 col-md-4 col-md-offset-4">
-				<h1 class="text-center login-title">Badger</h1>
+				<h1 class="text-center login-name">Badger</h1>
 				<div class="account-wall">
 					<img class="profile-img"
 						src="https://s-media-cache-ak0.pinimg.com/736x/81/b1/3e/81b13eb4b2c344db9fcdd206976c3b5c.jpg"

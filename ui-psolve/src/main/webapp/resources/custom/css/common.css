@@ -1,0 +1,16 @@
+.progress-bar {
+    -webkit-transition: width 1.5s ease-in-out;
+    transition: width 1.5s ease-in-out;
+}
+
+#profile-img {
+    width: 173.91304px;
+    height: 173.91304px;;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: 700;
+}
+
+.pbs-profile {
+    background-color: #337ab7;
+}
