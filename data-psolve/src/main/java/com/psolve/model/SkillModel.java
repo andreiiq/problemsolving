@@ -21,6 +21,9 @@ public class SkillModel {
 	@ManyToOne
 	@JoinColumn(name="levelModel")
 	private LevelModel levelModel;
+	
+	@Column(name = "name")
+	private String name;
 
 	public Long getId() {
 		return id;
@@ -44,6 +47,14 @@ public class SkillModel {
 
 	public void setLevelModel(LevelModel levelModel) {
 		this.levelModel = levelModel;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

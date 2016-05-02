@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,13 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.badger.service.UserService;
 import com.badger.util.BuserFileManager;
-import com.psolve.dao.StudentDAO;
+import com.psolve.dao.StudentRepo;
 import com.psolve.model.StudentModel;
 
 @Service
 public class DefaultUserService implements UserService {
 
-	private StudentDAO userDAO;
+	@Autowired
+	private StudentRepo studentRepo;
 
 	private BuserFileManager fileManager;
 
@@ -33,13 +35,13 @@ public class DefaultUserService implements UserService {
 	@Transactional
 	public StudentModel findUserByID(String id) {
 		long userCode = findUserCode(id);
-		return userDAO.findOne(userCode);
+		return studentRepo.findOne(userCode);
 	}
 
 	@Override
 	@Transactional
 	public StudentModel findUserByEmail(String email) {
-		return userDAO.findByEmail(email);
+		return studentRepo.findByEmail(email);
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class DefaultUserService implements UserService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		StudentModel user = userDAO.findByEmail(email);
+		StudentModel user = studentRepo.findByEmail(email);
 		if (user == null) {
 			logger.warn("User not in the database: " + email);
 			throw new UsernameNotFoundException("Username is not in the DB");
@@ -65,7 +67,7 @@ public class DefaultUserService implements UserService {
 
 	@Override
 	public void saveUser(StudentModel buser) {
-		userDAO.save(buser);
+		studentRepo.save(buser);
 	}
 
 	@Override

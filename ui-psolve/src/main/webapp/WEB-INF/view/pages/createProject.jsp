@@ -7,7 +7,7 @@
     <div class="form-group row">
         <label for="name-pr" class="col-sm-2 form-control-label">Name</label>
         <div class="col-sm-10">
-            <input name="name" type="text" class="form-control" id="name-pr" placeholder="Name">
+            <input name="title" type="text" class="form-control" id="name-pr" placeholder="Name">
             <form:errors path="name" cssClass="error">asddads</form:errors>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <label for="points-pr" class="col-sm-2 form-control-label">Points</label>
         <div class="col-sm-10">
             <input class=" points-pr range-input form-control" type="range" data-toggle="popover" data-content="12"
-                   name="rangeInput" min="0" max="999"/>
+                   name="pointsRewarded" min="0" max="999"/>
         </div>
     </div>
 
@@ -45,33 +45,33 @@
                     <div class="form-group row">
                         <label for="subtask-pr" class="col-sm-2 form-control-label">Subtask</label>
                         <div class="col-sm-10">
-                            <input name="subtaskModels[0].name" type="text" class="form-control subtask-pr" placeholder="Name">
+                            <input name="subtasks[0].title" type="text" class="form-control subtask-pr" placeholder="Name">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="subtask-desc-pr" class="col-sm-2 form-control-label">Info</label>
                         <div class="col-sm-10">
-                            <input name="subtaskModels[0].description" type="text" class="form-control subtask-desc-pr" placeholder="Info">
+                            <input name="subtasks[0].description" type="text" class="form-control subtask-desc-pr" placeholder="Info">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="points-pr" class="col-sm-2 form-control-label">Points</label>
                         <div class="col-sm-10">
                             <input  class=" points-pr range-input form-control" type="range" data-toggle="popover"
-                                   data-content="12" name="rangeInput" min="0" max="999"/>
+                                   data-content="12" name="subtasks[0].pointsRewarded" min="0" max="999"/>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="select-skill" class="col-sm-2 form-control-label">Skill</label>
                         <div class="col-sm-4">
-                            <select class="form-control select-skill">
+                            <select name="subtasks[0].skills[0].name" class="form-control select-skill">
                                 <option>Java</option>
                                 <option>PHP</option>
                                 <option>Javascript</option>
                             </select>
                         </div>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control select-levelModel" placeholder="Level">
+                            <input name="subtasks[0].skills[0].level" type="text" class="form-control select-levelModel" placeholder="Level">
                         </div>
                         <div class="col-sm-1">
                             <button type="button" class="add-new-skill btn btn-info btn-circle-sm"><i

@@ -8,4 +8,5 @@ import com.psolve.model.TaskModel;
 
 public interface TaskService {
     void addNewProject(TaskModel task);
+
 }

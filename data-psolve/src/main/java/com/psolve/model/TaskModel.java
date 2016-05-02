@@ -2,30 +2,18 @@ package com.psolve.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.*;
 
 @Entity
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class TaskModel extends AbstractTaskModel {
 
-	@OneToMany(mappedBy = "parentTask")
+	@OneToMany(mappedBy = "parentTask", cascade= CascadeType.ALL)
 	private List<SubtaskModel> subtaskModels;
 	
 	@OneToOne
 	@JoinColumn(name = "teacher_id")
 	private TeacherModel teacherModel;
-	
-	@Column(name = "pointsRewarded")
-	private double pointsRewarded;
-	
-	@OneToOne
-	@JoinColumn(name = "student_id")
-	private StudentModel studentModel;
 	
 	@OneToOne
 	@JoinColumn(name = "course_id")
@@ -45,22 +33,6 @@ public class TaskModel extends AbstractTaskModel {
 
 	public void setTeacherModel(TeacherModel teacherModel) {
 		this.teacherModel = teacherModel;
-	}
-
-	public double getPointsRewarded() {
-		return pointsRewarded;
-	}
-
-	public void setPointsRewarded(double pointsRewarded) {
-		this.pointsRewarded = pointsRewarded;
-	}
-
-	public StudentModel getStudentModel() {
-		return studentModel;
-	}
-
-	public void setStudentModel(StudentModel studentModel) {
-		this.studentModel = studentModel;
 	}
 
 	public CourseModel getCourseModel() {

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -25,9 +26,15 @@ public abstract class AbstractTaskModel {
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "TIMESTAMP_FIELD")
+	@Column(name = "deadline")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar deadline;
+	
+	@Column(name = "pointsRewarded")
+	private double pointsRewarded;
+	
+	@OneToOne
+	private StudentModel student;
 
 	public Long getId() {
 		return id;
@@ -60,5 +67,18 @@ public abstract class AbstractTaskModel {
 	public void setDeadline(Calendar deadline) {
 		this.deadline = deadline;
 	}
-	
+	public StudentModel getStudent() {
+		return student;
+	}
+
+	public void setStudent(StudentModel student) {
+		this.student = student;
+	}
+	public double getPointsRewarded() {
+		return pointsRewarded;
+	}
+
+	public void setPointsRewarded(double pointsRewarded) {
+		this.pointsRewarded = pointsRewarded;
+	}
 }

@@ -2,5 +2,7 @@
     <wb-module deploy-name="data-psolve">
         <wb-resource deploy-path="/" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/target/generated-sources"/>
+        <wb-resource deploy-path="/" source-path="/target/metamodel"/>
     </wb-module>
 </project-modules>

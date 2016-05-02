@@ -20,12 +20,15 @@
           rel="stylesheet">
 
 
-    <script src="<c:url value="/resources/web/js/jquery-1.11.2.min.js"/>"></script>
-    <script src="<c:url value="/resources/web/js/bootstrap.js"/>"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <script src="<c:url value="/resources/web/js/bootstrap-typeahead.min.js"/>"></script>
 
     <script src="<c:url value="/resources/custom/js/teacherPage.js"/>"></script>
     <script src="<c:url value="/resources/custom/js/common.js"/>"></script>
+    <script src="<c:url value="/resources/custom/js/header.js"/>"></script>
+
 
     <link href="<c:url value="/resources/custom/css/teacherPage.css"/>"
           rel="stylesheet">

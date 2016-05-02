@@ -1,128 +1,64 @@
 package com.psolve.model;
 
+import javax.persistence.*;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-
 @Entity
-public class StudentModel {
+@PrimaryKeyJoinColumn(referencedColumnName = "id")
+public class StudentModel extends AbstractUserModel {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Column(name = "education")
+    private String education;
 
-	@Column(name = "firstname", nullable = false)
-	private String firstname;
+    @Column(name = "profile_image_path")
+    private String profileImagePath;
 
-	@Column(name = "lastname", nullable = false)
-	private String lastname;
+    @Transient
+    private byte[] profileImage;
 
-	@Column(name = "email", nullable = false, unique = true)
-	private String email;
+    @Column(name = "skypeID")
+    private String skypeID;
 
-	@Column(name = "password", nullable = false)
-	private String password;
+    @OneToMany
+    private List<CoursePointsModel> points;
 
-	@Column(name = "education")
-	private String education;
+    public String getEducation() {
+        return education;
+    }
 
-	@Column(name = "profile_image_path")
-	private String profileImagePath;
+    public void setEducation(String education) {
+        this.education = education;
+    }
 
-	@Transient
-	private byte[] profileImage;
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
 
-	@Column(name = "skypeID")
-	private String skypeID;
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
 
-	@OneToMany
-	private List<CoursePointsModel> points;
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public String getSkypeID() {
+        return skypeID;
+    }
 
-	public String getFirstname() {
-		return firstname;
-	}
+    public void setSkypeID(String skypeID) {
+        this.skypeID = skypeID;
+    }
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
+    public List<CoursePointsModel> getPoints() {
+        return points;
+    }
 
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getEducation() {
-		return education;
-	}
-
-	public void setEducation(String education) {
-		this.education = education;
-	}
-
-	public String getProfileImagePath() {
-		return profileImagePath;
-	}
-
-	public void setProfileImagePath(String profileImagePath) {
-		this.profileImagePath = profileImagePath;
-	}
-
-	public byte[] getProfileImage() {
-		return profileImage;
-	}
-
-	public void setProfileImage(byte[] profileImage) {
-		this.profileImage = profileImage;
-	}
-
-	public String getSkypeID() {
-		return skypeID;
-	}
-
-	public void setSkypeID(String skypeID) {
-		this.skypeID = skypeID;
-	}
-
-	public List<CoursePointsModel> getPoints() {
-		return points;
-	}
-
-	public void setPoints(List<CoursePointsModel> points) {
-		this.points = points;
-	}
-	
-	
+    public void setPoints(List<CoursePointsModel> points) {
+        this.points = points;
+    }
 }

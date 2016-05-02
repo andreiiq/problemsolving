@@ -30,13 +30,15 @@ public class TeacherInputMapper {
             subtaskModel.setTitle(subtaskForm.getTitle());
             subtaskModel.setDescription(subtaskForm.getDescription());
 
+            subtaskModel.setParentTask(taskModel);
+
             subtaskModel.setPointsRewarded(subtaskForm.getPointsRewarded());
 
             List<LevelModel> levelModels = new ArrayList<>();
 
             for (SkillForm skillForm : subtaskForm.getSkills()) {
                 LevelModel levelModel = new LevelModel();
-                levelModel.setName(skillForm.getName());
+//                levelModel.setName(skillForm.getName());
                 levelModel.setValue(skillForm.getLevel());
 
                 levelModels.add(levelModel);

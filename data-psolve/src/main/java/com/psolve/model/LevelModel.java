@@ -22,8 +22,6 @@ public class LevelModel {
 	@Column(name = "xp_needed")
 	private Long xpNeeded;
 
-	@Column(name = "name")
-	private String name;
 
 	@Column(name = "capped")
 	private Boolean capped;
@@ -55,13 +53,6 @@ public class LevelModel {
 		this.xpNeeded = xpNeeded;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public Boolean getCapped() {
 		return capped;
