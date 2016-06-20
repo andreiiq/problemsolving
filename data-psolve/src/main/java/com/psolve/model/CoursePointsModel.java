@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
+import javax.persistence.OneToOne;
 
 @Entity
 public class CoursePointsModel {
@@ -19,8 +19,11 @@ public class CoursePointsModel {
 	private double points;
 
 	@ManyToOne
-	@JoinColumn(name = "courseModel")
-	private CourseModel courseModel;
+	@JoinColumn(name = "course")
+	private CourseModel course;
+
+	@OneToOne
+	private StudentModel owner;
 
 	public Long getId() {
 		return id;
@@ -38,11 +41,20 @@ public class CoursePointsModel {
 		this.points = points;
 	}
 
-	public CourseModel getCourseModel() {
-		return courseModel;
+	public CourseModel getCourse() {
+		return course;
 	}
 
-	public void setCourseModel(CourseModel courseModel) {
-		this.courseModel = courseModel;
+	public void setCourse(CourseModel course) {
+		this.course = course;
 	}
+
+	public StudentModel getOwner() {
+		return owner;
+	}
+
+	public void setOwner(StudentModel owner) {
+		this.owner = owner;
+	}
+
 }

@@ -8,6 +8,7 @@ import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 
 import com.psolve.model.CourseModel;
 import com.psolve.model.CourseModel_;
@@ -25,6 +26,7 @@ import com.psolve.model.TaskModel_;
 /**
  * Created by andre on 4/17/2016.
  */
+@Component
 public class TaskSpecs {
 
 	public static Specification<TaskModel> titleContains(String title) {
@@ -64,23 +66,21 @@ public class TaskSpecs {
 		};
 	}
 
-	public static Specification<TaskModel> containsSkills(Map<String, String> skills) {
+	public static Specification<TaskModel> containsSkills(Map<String, Long> skills) {
 		return (root, query, builder) -> {
-
-			Join<SubtaskModel, SkillModel> skillJoin = root.join(TaskModel_.subtaskModels)
-					.join(SubtaskModel_.skillsGained);
-
-			Join<SkillModel, LevelModel> levelJoin = skillJoin.join(SkillModel_.levelModel);
-
 			Predicate containsSkills = null;
 
-			for (Entry<String, String> entry : skills.entrySet()) {
-				String key = entry.getKey();
-				String value = entry.getValue();
+			for (Entry<String, Long> entry : skills.entrySet()) {
+				Join<SubtaskModel, SkillModel> skillJoin = root.join(TaskModel_.subtaskModels)
+						.join(SubtaskModel_.skillsGained);
+
+				Join<SkillModel, LevelModel> levelJoin = skillJoin.join(SkillModel_.levelModel);
 				
-				Predicate levelRange =  builder.lessThanOrEqualTo(levelJoin.get(LevelModel_.value), Long.valueOf(value));
-				Predicate entryPredicate = builder
-						.and(builder.equal(skillJoin.get(SkillModel_.name), key), levelRange);
+				String key = entry.getKey();
+				Long value = entry.getValue();
+
+				Predicate levelRange = builder.lessThanOrEqualTo(levelJoin.get(LevelModel_.value), value);
+				Predicate entryPredicate = builder.and(builder.equal(skillJoin.get(SkillModel_.name), key), levelRange);
 
 				if (containsSkills != null) {
 					containsSkills = builder.and(entryPredicate, containsSkills);
@@ -88,7 +88,7 @@ public class TaskSpecs {
 					containsSkills = entryPredicate;
 				}
 			}
-			
+
 			return containsSkills;
 		};
 	}

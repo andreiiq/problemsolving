@@ -1,50 +1,76 @@
 package com.badger.form;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
  * Class used to store information of a sutask sent by a User.
  */
 public class TaskForm {
-    @NotNull
-    @NotEmpty
-    private String title;
-    private String description;
-    private double pointsRewarded;
-    private List<SubtaskForm> subtasks;
+	private long id;
+	private long grade;
+	private String title;
+	private String description;
+	private double pointsRewarded;
+	private boolean isOwnTask;
 
-    public String getTitle() {
-        return title;
-    }
+	private List<SubtaskForm> subtasks;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public double getPointsRewarded() {
-        return pointsRewarded;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setPointsRewarded(double pointsRewarded) {
-        this.pointsRewarded = pointsRewarded;
-    }
+	public double getPointsRewarded() {
+		return pointsRewarded;
+	}
 
-    public List<SubtaskForm> getSubtasks() {
-        return subtasks;
-    }
+	public void setPointsRewarded(double pointsRewarded) {
+		this.pointsRewarded = pointsRewarded;
+	}
 
-    public void setSubtasks(List<SubtaskForm> subtasks) {
-        this.subtasks = subtasks;
-    }
+	public List<SubtaskForm> getSubtasks() {
+		return subtasks;
+	}
+
+	public void setSubtasks(List<SubtaskForm> subtasks) {
+		this.subtasks = subtasks;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getGrade() {
+		return grade;
+	}
+
+	public void setGrade(long grade) {
+		this.grade = grade;
+	}
+
+	public boolean isOwnTask() {
+		return isOwnTask;
+	}
+
+	public void setOwnTask(boolean isOwnTask) {
+		this.isOwnTask = isOwnTask;
+	}
+	
+	
+
 }

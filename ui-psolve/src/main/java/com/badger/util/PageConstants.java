@@ -7,15 +7,11 @@ package com.badger.util;
  *
  */
 public interface PageConstants {
-	String FEEDS_PAGE = "pages/feedsPage";
-	String CLASSROOM_PAGE = "pages/classroomPage";
 	String LOGIN_PAGE = "pages/loginPage";
-	String COURSE_PAGE = "pages/coursePage";
 	String PROFILE_PAGE = "pages/profilePage";
-	String QUIZ_PAGE = "pages/quizPage";
 
-	String HEADER = "pages/common/header";
-	String FOOTER = "pages/common/footer";
 	String TEAHCER_ADMINISTRATION = "pages/teacherPage";
-	String PROJECT_CREATE_FORM= "pages/createProject";
+	
+	String STUDENT_PAGE_URL = "/";
+	String TEACHER_PAGE_URL = "/teacher/";
 }

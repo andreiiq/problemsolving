@@ -7,58 +7,81 @@ import java.util.List;
 @PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class StudentModel extends AbstractUserModel {
 
-    @Column(name = "education")
-    private String education;
+	@Column(name = "education")
+	private String education;
 
-    @Column(name = "profile_image_path")
-    private String profileImagePath;
+	@Transient
+	private byte[] profileImage;
 
-    @Transient
-    private byte[] profileImage;
+	@Column(name = "skypeID")
+	private String skypeID;
 
-    @Column(name = "skypeID")
-    private String skypeID;
+	@OneToMany
+	private List<CoursePointsModel> points;
 
-    @OneToMany
-    private List<CoursePointsModel> points;
+	@OneToMany(mappedBy = "student")
+	private List<SkillModel> skills;
 
-    public String getEducation() {
-        return education;
-    }
+	@OneToMany(mappedBy = "student")
+	private List<AbstractTaskModel> tasks;
 
-    public void setEducation(String education) {
-        this.education = education;
-    }
+	@OneToMany(mappedBy = "student")
+	private List<SolutionModel> solutions;
 
-    public String getProfileImagePath() {
-        return profileImagePath;
-    }
+	public String getEducation() {
+		return education;
+	}
 
-    public void setProfileImagePath(String profileImagePath) {
-        this.profileImagePath = profileImagePath;
-    }
+	public void setEducation(String education) {
+		this.education = education;
+	}
 
-    public byte[] getProfileImage() {
-        return profileImage;
-    }
+	public byte[] getProfileImage() {
+		return profileImage;
+	}
 
-    public void setProfileImage(byte[] profileImage) {
-        this.profileImage = profileImage;
-    }
+	public void setProfileImage(byte[] profileImage) {
+		this.profileImage = profileImage;
+	}
 
-    public String getSkypeID() {
-        return skypeID;
-    }
+	public String getSkypeID() {
+		return skypeID;
+	}
 
-    public void setSkypeID(String skypeID) {
-        this.skypeID = skypeID;
-    }
+	public void setSkypeID(String skypeID) {
+		this.skypeID = skypeID;
+	}
 
-    public List<CoursePointsModel> getPoints() {
-        return points;
-    }
+	public List<CoursePointsModel> getPoints() {
+		return points;
+	}
 
-    public void setPoints(List<CoursePointsModel> points) {
-        this.points = points;
-    }
+	public void setPoints(List<CoursePointsModel> points) {
+		this.points = points;
+	}
+
+	public List<SolutionModel> getSolutions() {
+		return solutions;
+	}
+
+	public void setSolutions(List<SolutionModel> solutions) {
+		this.solutions = solutions;
+	}
+
+	public List<SkillModel> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<SkillModel> skills) {
+		this.skills = skills;
+	}
+
+	public List<AbstractTaskModel> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<AbstractTaskModel> tasks) {
+		this.tasks = tasks;
+	}
+
 }

@@ -1,12 +1,15 @@
 package com.psolve.dao;
 
-import com.psolve.model.AbstractTaskModel;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+
+import com.psolve.model.AbstractTaskModel;
 
 /**
  * Created by andre on 4/17/2016.
  */
-@NoRepositoryBean
+@Repository
 public interface AbstractTaskRepo<T extends AbstractTaskModel> extends JpaRepository<T, Long> {
+	AbstractTaskModel findById(long id);
 }

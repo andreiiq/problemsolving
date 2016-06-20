@@ -16,12 +16,15 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.badger.form.UserDetails;
 import com.badger.service.UserService;
+import com.badger.util.BuserFileManager;
 import com.badger.util.MVCConstants;
 import com.badger.util.PageConstants;
+import com.psolve.model.AbstractUserModel;
 import com.psolve.model.StudentModel;
 
 /**
@@ -41,6 +44,9 @@ public class UserController {
 	@Autowired
 	AuthenticationManager authenticationManager;
 
+	@Autowired
+	BuserFileManager buserFileManager;
+
 	/**
 	 * The class logger.
 	 */
@@ -55,9 +61,18 @@ public class UserController {
 	public String getLoginPage() {
 		return PageConstants.LOGIN_PAGE;
 	}
-	
+
+	@ResponseBody
+	@RequestMapping(value = "/profile-image", method = RequestMethod.GET)
+	public byte[] getProfileImage() throws IOException {
+		AbstractUserModel user = userService.getCurrentUser();
+		byte[] image = buserFileManager.getBuserProfileImage(user);
+		return image;
+	}
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getHomepage() {
+
 		return PageConstants.PROFILE_PAGE;
 	}
 
@@ -70,9 +85,7 @@ public class UserController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String getRegisterPage(UserDetails userDetails, HttpServletRequest request)
-			throws IOException {
-
+	public String getRegisterPage(UserDetails userDetails, HttpServletRequest request) throws IOException {
 
 		StudentModel buser = new StudentModel();
 		buser.setEmail(userDetails.getEmail());
@@ -80,7 +93,7 @@ public class UserController {
 		buser.setFirstname(userDetails.getFirstname());
 		buser.setLastname(userDetails.getLastname());
 		buser.setEducation(userDetails.getEducation());
-		
+
 		MultipartFile profileImage = userDetails.getProfileImage();
 		userService.setProfileImage(buser, profileImage.getInputStream());
 		userService.saveUser(buser);

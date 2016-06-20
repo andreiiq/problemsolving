@@ -5,20 +5,23 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class TaskModel extends AbstractTaskModel {
 
 	@OneToMany(mappedBy = "parentTask", cascade= CascadeType.ALL)
 	private List<SubtaskModel> subtaskModels;
 	
-	@OneToOne
-	@JoinColumn(name = "teacher_id")
+	@ManyToOne
+	@JoinColumn(name = "ownedTasks")
 	private TeacherModel teacherModel;
 	
 	@OneToOne
 	@JoinColumn(name = "course_id")
 	private CourseModel courseModel;
-
+	
+	@OneToOne
+	@JoinColumn(name="solution_id", referencedColumnName="id")
+	private SolutionModel solutionModel;
+	
 	public List<SubtaskModel> getSubtaskModels() {
 		return subtaskModels;
 	}
@@ -42,5 +45,15 @@ public class TaskModel extends AbstractTaskModel {
 	public void setCourseModel(CourseModel courseModel) {
 		this.courseModel = courseModel;
 	}
+
+	public SolutionModel getSolutionModel() {
+		return solutionModel;
+	}
+
+	public void setSolutionModel(SolutionModel solutionModel) {
+		this.solutionModel = solutionModel;
+	}
+	
+	
 	
 }

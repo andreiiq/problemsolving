@@ -1,5 +1,6 @@
 $(document).ready(function() {
 $("#profile-picture-input").change(readURL);
+
 	function readURL() {
 		if (this.files && this.files[0]) {
 			var reader = new FileReader();

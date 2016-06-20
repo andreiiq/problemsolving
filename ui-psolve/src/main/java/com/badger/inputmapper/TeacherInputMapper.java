@@ -44,7 +44,7 @@ public class TeacherInputMapper {
                 levelModels.add(levelModel);
             }
 
-            subtaskModel.setLevelsRequired(levelModels);
+//            subtaskModel.setLevelsRequired(levelModels);
             subtaskModels.add(subtaskModel);
         }
 

@@ -8,8 +8,10 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,13 +21,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.badger.service.UserService;
 import com.badger.util.BuserFileManager;
 import com.psolve.dao.StudentRepo;
+import com.psolve.dao.UserRepo;
+import com.psolve.model.AbstractUserModel;
 import com.psolve.model.StudentModel;
+import com.psolve.model.TeacherModel;
 
 @Service
 public class DefaultUserService implements UserService {
 
 	@Autowired
 	private StudentRepo studentRepo;
+
+	@Autowired
+	private UserRepo<AbstractUserModel> userRepo;
 
 	private BuserFileManager fileManager;
 
@@ -39,9 +47,17 @@ public class DefaultUserService implements UserService {
 	}
 
 	@Override
+	public AbstractUserModel getCurrentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = (String) auth.getPrincipal();
+
+		return userRepo.findByEmail(email);
+	}
+
+	@Override
 	@Transactional
-	public StudentModel findUserByEmail(String email) {
-		return studentRepo.findByEmail(email);
+	public AbstractUserModel findUserByEmail(String email) {
+		return userRepo.findByEmail(email);
 	}
 
 	/**
@@ -51,15 +67,22 @@ public class DefaultUserService implements UserService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		StudentModel user = studentRepo.findByEmail(email);
+		AbstractUserModel user = userRepo.findByEmail(email);
+
 		if (user == null) {
 			logger.warn("User not in the database: " + email);
 			throw new UsernameNotFoundException("Username is not in the DB");
 		}
-		String password = user.getPassword();
 
+		String password = user.getPassword();
 		Collection<GrantedAuthority> autorities = new ArrayList<>();
+
 		autorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		
+		if (user instanceof TeacherModel) {
+			autorities.add(new SimpleGrantedAuthority("ROLE_TEACHER"));
+		}
+
 		UserDetails userDetails = new User(email, password, autorities);
 
 		return userDetails;

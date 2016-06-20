@@ -10,6 +10,8 @@ public class SubtaskForm {
     private String description;
     private List<SkillForm> skills;
     private double pointsRewarded;
+    private long id;
+    private long grade;
 
     public String getTitle() {
         return title;
@@ -42,4 +44,22 @@ public class SubtaskForm {
     public void setPointsRewarded(double pointsRewarded) {
         this.pointsRewarded = pointsRewarded;
     }
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getGrade() {
+		return grade;
+	}
+
+	public void setGrade(long grade) {
+		this.grade = grade;
+	}
+    
+    
 }

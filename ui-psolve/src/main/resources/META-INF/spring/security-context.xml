@@ -16,10 +16,9 @@
         <security:intercept-url pattern="/**"
                                 access="hasRole('ROLE_USER')" />
         <security:intercept-url pattern="/teacher/**"
-                                access="hasRole('ROLE_ADMIN')" />
+                                access="hasRole('ROLE_TEACHER')" />
         <security:form-login login-page="/login"
-                             login-processing-url="/j_spring_security_check" default-target-url="/"
-                             always-use-default-target="true"/>
+                             login-processing-url="/j_spring_security_check" authentication-success-handler-ref="customAuthenticationSuccessHandler"/>
         <security:logout logout-url="/logout" />
         <security:csrf disabled="true"/>
     </security:http>

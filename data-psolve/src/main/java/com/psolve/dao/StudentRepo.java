@@ -1,11 +1,10 @@
 package com.psolve.dao;
 
-import com.psolve.model.StudentModel;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import com.psolve.model.StudentModel;
+
 @Repository
-public interface StudentRepo extends JpaRepository<StudentModel, Long>, JpaSpecificationExecutor<StudentModel> {
-    StudentModel findByEmail(String email);
+public interface StudentRepo  extends UserRepo<StudentModel>, JpaSpecificationExecutor<StudentModel> {
 }

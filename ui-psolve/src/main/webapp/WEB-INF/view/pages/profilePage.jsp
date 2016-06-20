@@ -2,12 +2,12 @@
          pageEncoding="ISO-8859-1" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="pbs" tagdir="/WEB-INF/tags" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <name>Teacher Admin</name>
     <link href="<c:url value="/resources/web/css/bootstrap.min.css"/>"
           rel="stylesheet">
     <link href="<c:url value="/resources/web/css/bootstrap-social.css"/>"
@@ -28,12 +28,17 @@
     <script src="<c:url value="/resources/custom/js/teacherPage.js"/>"></script>
     <script src="<c:url value="/resources/custom/js/common.js"/>"></script>
     <script src="<c:url value="/resources/custom/js/header.js"/>"></script>
+        <script src="<c:url value="/resources/custom/js/solution.js"/>"></script>
+    
+    <script src="<c:url value="/resources/web/js/jquery.autocomplete.min.js"/>"></script>
+    
 
 
     <link href="<c:url value="/resources/custom/css/teacherPage.css"/>"
           rel="stylesheet">
     <link href="<c:url value="/resources/custom/css/common.css"/>"
           rel="stylesheet">
+     <title>Teacher Admin</title>
 </head>
 <body>
 <pbs:header/>
@@ -44,7 +49,7 @@
                 <c:url value="/profile-image" var="profileImageURL"/>
                 <img id="profile-img"
                      class="img-responsive center-block img-thumbnail"
-                     src="<c:url value="/resources/images/empty_profile.gif"/>"> <br>
+                     src="<c:url value="/profile-image"/>"> <br>
             </div>
             <div class="user-information col-lg-4">
                 <br>
@@ -103,12 +108,22 @@
                 <button id="view-create-projects" type="button"
                         class="list-group-item">Create Project
                 </button>
-                <button id="view-active-projects" type="button"
+                <c:url value="/search/findUserTasks" var="findUserTasks" />
+			  <form:form class="view-projects-form" action="${findUserTasks}" method="POST">
+                  <button id="view-my-projects" type="button"
                         class="list-group-item">View Projects
+                  </button>
+                  <input class="current-page-number" type="hidden" name="page" value="0" />
+                </form:form>
+                <button id="search-projects" type="button"
+                        class="list-group-item">Search Projects
                 </button>
-                <button id="view-sent-projects" type="button"
+              <c:url value="/teacher/getSolutions" var="getSolutions" />
+              <form:form class="view-solutions-form" action="${getSolutions}" method="GET">
+                <button id="view-solutions-button" type="button"
                         class="list-group-item">View Solutions
                 </button>
+                </form:form>
             </div>
 
         </div>
@@ -122,7 +137,7 @@
 
             <div id="vproject-content" class="hidden col-lg-4">
                 <div id="vproject" class="accordion row">
-                    <pbs:projectDetails/>
+                    <pbs:selectedProject/>
                 </div>
             </div>
 
@@ -135,6 +150,12 @@
             <div id="sproject-content" class="hidden col-lg-4">
                 <div id="sproject" class="accordion row">
                     <pbs:solutions/>
+                </div>
+            </div>
+            
+             <div id="mproject-content" class="hidden col-lg-4">
+                <div id="mproject" class="accordion row">
+                    <pbs:myProjects/>
                 </div>
             </div>
 

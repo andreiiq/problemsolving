@@ -9,7 +9,7 @@ public class FilterSearchData {
 	private int toLevel;
 	private String course;
 	private long points;
-	private Map<String, String> skills;
+	private Map<String, Long> skills;
 	
 	public boolean isOwnedByCurrentUser() {
 		return ownedByCurrentUser;
@@ -43,10 +43,10 @@ public class FilterSearchData {
 		this.course = course;
 	}
 	
-	public Map<String, String> getSkills() {
+	public Map<String, Long> getSkills() {
 		return skills;
 	}
-	public void setSkills(Map<String, String> skills) {
+	public void setSkills(Map<String, Long> skills) {
 		this.skills = skills;
 	}
 	public long getPoints() {

@@ -14,3 +14,14 @@
 .pbs-profile {
     background-color: #337ab7;
 }
+
+.dropdown-element:hover {
+	color: #337ab7;	
+}
+
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}

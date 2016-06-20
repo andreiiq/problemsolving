@@ -17,11 +17,15 @@ public class SkillModel {
 
 	@Column(name = "experience")
 	private double experience;
-	
+
 	@ManyToOne
-	@JoinColumn(name="levelModel")
+	@JoinColumn(name = "levelModel")
 	private LevelModel levelModel;
 	
+	@ManyToOne
+	@JoinColumn(name = "skills")
+	private StudentModel student;
+
 	@Column(name = "name")
 	private String name;
 
@@ -58,4 +62,34 @@ public class SkillModel {
 	}
 	
 	
+
+	public StudentModel getStudent() {
+		return student;
+	}
+
+	public void setStudent(StudentModel student) {
+		this.student = student;
+	}
+
+	@Override
+	public boolean equals(Object skill) {
+		if (!(skill instanceof SkillModel)) {
+			return false;
+		}
+		SkillModel skillModel = (SkillModel) skill;
+		String name = skillModel.getName();
+		if (this.name.equals(name)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
 }

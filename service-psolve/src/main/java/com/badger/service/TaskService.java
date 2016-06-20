@@ -1,5 +1,6 @@
 package com.badger.service;
 
+import com.psolve.model.AbstractTaskModel;
 import com.psolve.model.TaskModel;
 
 /**
@@ -7,6 +8,12 @@ import com.psolve.model.TaskModel;
  */
 
 public interface TaskService {
-    void addNewProject(TaskModel task);
+	void addNewProject(TaskModel task);
+
+	void saveTask(AbstractTaskModel task);
+
+	AbstractTaskModel findTaskByID(long id);
+	
+	void assignTaskToCurrentUser(TaskModel taskModel);
 
 }

@@ -9,15 +9,23 @@ $(document).ready(
             }
         });
 
-        $('#view-active-projects').click(function () {
+        $('#search-projects').click(function () {
             var openContent = $('.activity-content-wraper >:not(.hidden)');
             if (!openContent.hasClass('aproject-content')) {
                 openContent.addClass('hidden');
                 $('#aproject-content').removeClass('hidden');
             }
         });
+        
+        $('#view-my-projects').click(function () {
+            var openContent = $('.activity-content-wraper >:not(.hidden)');
+            if (!openContent.hasClass('mproject-content')) {
+                openContent.addClass('hidden');
+                $('#mproject-content').removeClass('hidden');
+            }
+        });
 
-        $('#view-sent-projects').click(function () {
+        $('#view-solutions-button').click(function () {
             var openContent = $('.activity-content-wraper >:not(.hidden)');
             if (!openContent.hasClass('sproject-content')) {
                 openContent.addClass('hidden');
@@ -140,39 +148,52 @@ $(document).ready(
                 $(this).find('.hover-color').css("color", "#337ab7");
             }
         },'.project-button');
+        
+        
+        $('#view-solutions-button').click(function(){
+        	var form = $(this).parent();
+        	 var action = form.attr('action');
+             var method = form.attr('method');
+             
+             var resultContainer = $('#solutions-container');
+             resultContainer.empty();
+             var html="";
+             $.ajax({
+                 contentType: 'application/json; charset=utf-8',
+                 type: method,
+                 url: action,
+                 dataType: 'json',	
+                 data: form.serializeObject(),
+                 success: function (data) {
+                 	console.log(data);
+                 	$.each(data, function(key, value) { 
+                 		html = html.concat('<div class="solution-wraper row">' +
+                		'<div class="panel panel-default">' +
+             			'<div class="blue-header panel-heading">' +
+             		     '<h3 class="panel-name">'+ key +'</h3>' +
+             			'</div><div class="panel-body">');
+    	                 $.each( value, function( index, solution){
+    	                	console.log(solution);
+    	                	html = html.concat('<div class="solution col-lg-3">' +
+    	                			'<a href="'+ ctx +'/teacher/downloadSolution/'+solution.id+'" download>'+		
+                 					'<img class="solution-img img-responsive img-thumbnail"' +
+                 					'src="'+ ctx +'/resources/images/archive_icon.png"/></a> <span class="hover-color text-center">'+ solution.projectName +'</span>' +
+                 				     '</div>');
+    	                });
+    	                html = html.concat('</div></div></div>');
+                 	});
+	                resultContainer.append(html);
 
+                 	}
+                 	});
+             });
+        	
 
         $('#edit-seleted-project').click(function () {
             $('.form-control').removeAttr("readonly");
             $('.form-control').removeAttr("disabled");
         });
+        
+        
 
-//			$('.projectDescription').text(
-//					function() {
-//						var firstStringPart = $(this).text().substr(0,
-//								charLength);
-//						var lastSpace = firstStringPart.lastIndexOf(".");
-//
-//						var trimmedFirstPart = firstStringPart.substr(0, Math
-//								.min(firstStringPart.length, lastSpace +1));
-//
-//						var acordionDescription = $(this).next();
-//						acordionDescription
-//								.text($(this).text().substr(
-//										trimmedFirstPart.length,
-//										$(this).text().length));
-//
-//						return trimmedFirstPart;
-//					});
-//		
-//		 function positionAddRemoveButtons() {
-//			 var addButton = $('.add-new-subtask');
-//			 var removeButton = $('.remove-current-subtask');
-//			 console.log($('.panel.panel-default').length )
-//			 if($('.panel.panel-default').length == 1) {
-//				 removeButton.remove();
-//			 }
-//			 
-//			 $('.subtask-btn:last').prepend(addButton);
-//			}
     });

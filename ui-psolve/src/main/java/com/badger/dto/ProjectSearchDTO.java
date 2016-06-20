@@ -1,20 +1,20 @@
-package com.badger.responses;
+package com.badger.dto;
 
 import java.util.List;
 
 /**
  * Created by andre on 4/17/2016.
  */
-public class ProjectSearchResponse {
-	private List<TaskModelResponse> tasks;
+public class ProjectSearchDTO {
+	private List<TaskDTO> tasks;
 	private int numberOfPages;
 	private int currentPage;
 
-	public List<TaskModelResponse> getTasks() {
+	public List<TaskDTO> getTasks() {
 		return tasks;
 	}
 
-	public void setTasks(List<TaskModelResponse> tasks) {
+	public void setTasks(List<TaskDTO> tasks) {
 		this.tasks = tasks;
 	}
 

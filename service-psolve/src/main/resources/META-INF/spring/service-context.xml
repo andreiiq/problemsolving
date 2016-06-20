@@ -6,4 +6,6 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<context:component-scan base-package="com.badger" />
+	<context:property-placeholder order="2" location="classpath*:/META-INF/notification-messages" ignore-unresolvable="true" />
+     <context:property-placeholder order="3" location="classpath*:/META-INF/evaluation-values"  ignore-unresolvable="true"/>
 </beans>

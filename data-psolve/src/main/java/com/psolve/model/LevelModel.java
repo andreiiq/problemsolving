@@ -20,7 +20,7 @@ public class LevelModel {
 	private Long value;
 
 	@Column(name = "xp_needed")
-	private Long xpNeeded;
+	private Double xpNeeded;
 
 
 	@Column(name = "capped")
@@ -45,11 +45,11 @@ public class LevelModel {
 		this.value = value;
 	}
 
-	public Long getXpNeeded() {
+	public double getXpNeeded() {
 		return xpNeeded;
 	}
 
-	public void setXpNeeded(Long xpNeeded) {
+	public void setXpNeeded(double xpNeeded) {
 		this.xpNeeded = xpNeeded;
 	}
 

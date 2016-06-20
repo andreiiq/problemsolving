@@ -16,4 +16,7 @@ public interface SearchService {
 
     Page<TaskModel> findProjectsByTitle(String title, int page);
     Page<TaskModel> filterProjects(FilterSearchData searchData, int page);
+    Page<TaskModel> findAllTasks(int page);
+    Page<TaskModel> findCurrentUserTasks(int page);
+
 }
