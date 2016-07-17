@@ -1,3 +1,4 @@
 exprate-for-high-level=2
 exprate-for-same-level=1
 exprate-for-low-level=0.75
+percentage-points-for-mentor=0.25

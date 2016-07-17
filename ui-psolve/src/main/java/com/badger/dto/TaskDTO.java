@@ -9,8 +9,10 @@ public class TaskDTO {
 	private String course;
 	private double points;
 	private String ownerEmail;
+	private String teacherEmail;
 	private boolean hasSolution;
-	private boolean isOwned;
+	private boolean isOwned; 
+	private SolutionDTO solutionDTO;
 
 	private List<SubtaskDTO> subtasks;
 
@@ -84,6 +86,22 @@ public class TaskDTO {
 
 	public void setOwned(boolean isOwned) {
 		this.isOwned = isOwned;
+	}
+
+	public SolutionDTO getSolutionDTO() {
+		return solutionDTO;
+	}
+
+	public void setSolutionDTO(SolutionDTO solutionDTO) {
+		this.solutionDTO = solutionDTO;
+	}
+
+	public String getTeacherEmail() {
+		return teacherEmail;
+	}
+
+	public void setTeacherEmail(String teacherEmail) {
+		this.teacherEmail = teacherEmail;
 	}
 	
 

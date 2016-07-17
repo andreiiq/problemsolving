@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringFacetInspection -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
@@ -7,10 +8,14 @@
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 
+	<!-- Loads database configurations -->
 	<context:property-placeholder order="1" ignore-unresolvable="true"
 		location="classpath*:/META-INF/database.properties,classpath*:/META-INF/application.properties" />
+
+	<!--Scans packages for jpa entities -->
 	<jpa:repositories base-package="com.psolve.dao" />
 
+	<!--Configurations for the datasource-->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="${db.driver}" />
 		<property name="jdbcUrl" value="${db.url}" />

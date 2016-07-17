@@ -9,6 +9,7 @@ public class TaskForm {
 	private long id;
 	private long grade;
 	private String title;
+	private String course;
 	private String description;
 	private double pointsRewarded;
 	private boolean isOwnTask;
@@ -70,7 +71,14 @@ public class TaskForm {
 	public void setOwnTask(boolean isOwnTask) {
 		this.isOwnTask = isOwnTask;
 	}
-	
+
+	public String getCourse() {
+		return course;
+	}
+
+	public void setCourse(String course) {
+		this.course = course;
+	}
 	
 
 }

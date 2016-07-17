@@ -22,6 +22,8 @@ import com.psolve.model.SubtaskModel;
 import com.psolve.model.SubtaskModel_;
 import com.psolve.model.TaskModel;
 import com.psolve.model.TaskModel_;
+import com.psolve.model.TeacherModel;
+import com.psolve.model.TeacherModel_;
 
 /**
  * Created by andre on 4/17/2016.
@@ -37,7 +39,7 @@ public class TaskSpecs {
 
 	public static Specification<TaskModel> ownedBy(String student) {
 		return (root, query, builder) -> {
-			Join<TaskModel, StudentModel> ownerJoin = root.join("student");
+			Join<TaskModel, StudentModel> ownerJoin = root.join(TaskModel_.student);
 			return builder.equal(ownerJoin.get(StudentModel_.email), student);
 		};
 	}
@@ -55,17 +57,6 @@ public class TaskSpecs {
 		};
 	}
 
-	public static Specification<TaskModel> levelRange(long fromLevel, long toLevel) {
-		return (root, query, builder) -> {
-			ParameterExpression<Long> fromLevelParam = builder.parameter(Long.class, String.valueOf(fromLevel));
-			ParameterExpression<Long> toLevelParam = builder.parameter(Long.class, String.valueOf(toLevel));
-
-			Join<SubtaskModel, LevelModel> levelJoin = root.join(TaskModel_.subtaskModels)
-					.join(SubtaskModel_.levelsRequired);
-			return builder.between(levelJoin.get(LevelModel_.value), fromLevelParam, toLevelParam);
-		};
-	}
-
 	public static Specification<TaskModel> containsSkills(Map<String, Long> skills) {
 		return (root, query, builder) -> {
 			Predicate containsSkills = null;
@@ -75,7 +66,7 @@ public class TaskSpecs {
 						.join(SubtaskModel_.skillsGained);
 
 				Join<SkillModel, LevelModel> levelJoin = skillJoin.join(SkillModel_.levelModel);
-				
+
 				String key = entry.getKey();
 				Long value = entry.getValue();
 
@@ -88,8 +79,34 @@ public class TaskSpecs {
 					containsSkills = entryPredicate;
 				}
 			}
-
 			return containsSkills;
+		};
+	}
+
+	public static Specification<TaskModel> levelRange(long fromLevel, long toLevel) {
+		return (root, query, builder) -> {
+			ParameterExpression<Long> fromLevelParam = builder.parameter(Long.class, String.valueOf(fromLevel));
+			ParameterExpression<Long> toLevelParam = builder.parameter(Long.class, String.valueOf(toLevel));
+
+			Join<SubtaskModel, LevelModel> levelJoin = root.join(TaskModel_.subtaskModels)
+					.join(SubtaskModel_.levelsRequired);
+			return builder.between(levelJoin.get(LevelModel_.value), fromLevelParam, toLevelParam);
+		};
+	}
+
+	public static Specification<TaskModel> hasMentor(String tutor) {
+		return (root, query, builder) -> {
+			Join<TaskModel, SubtaskModel> subtaskJoin = root.join(TaskModel_.subtaskModels);
+			Join<SubtaskModel, StudentModel> studentJoin = subtaskJoin.join(SubtaskModel_.tutor);
+
+			return builder.equal(studentJoin.get(StudentModel_.email), tutor);
+		};
+	}
+
+	public static Specification<TaskModel> createdBy(String teacher) {
+		return (root, query, builder) -> {
+			Join<TaskModel, TeacherModel> ownerJoin = root.join(TaskModel_.teacherModel);
+			return builder.equal(ownerJoin.get(TeacherModel_.email), teacher);
 		};
 	}
 

@@ -1,20 +1,19 @@
 package com.psolve.dao.specs;
 
-import com.psolve.model.AbstractUserModel;
-import com.psolve.model.LevelModel;
-import com.psolve.model.LevelModel_;
-import com.psolve.model.SkillModel;
-import com.psolve.model.SkillModel_;
-import com.psolve.model.StudentModel;
-import com.psolve.model.StudentModel_;
+import java.util.List;
 
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import com.psolve.model.SkillModel;
+import com.psolve.model.SkillModel_;
+import com.psolve.model.StudentModel;
+import com.psolve.model.StudentModel_;
 
 /**
  * Created by andre on 4/10/2016.
@@ -33,6 +32,27 @@ public class UserSpecs {
 
 	}
 
+	public static Specification<StudentModel> hasSkills(List<SkillModel> skillModels) {
+
+		return (root, query, builder) -> {
+
+			Join<StudentModel, SkillModel> skillJoin = root.join(StudentModel_.skills);
+
+			Predicate containsSkills = null;
+
+			for (SkillModel skillModel : skillModels) {
+				if (containsSkills != null) {
+					containsSkills = builder.and(builder.equal(skillJoin.get(SkillModel_.id), skillModel.getId()),
+							containsSkills);
+				} else {
+					containsSkills = builder.equal(skillJoin.get(SkillModel_.name), skillModel.getName());
+				}
+			}
+
+			return containsSkills;
+		};
+
+	}
 
 	public static Specification<StudentModel> notCurrentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

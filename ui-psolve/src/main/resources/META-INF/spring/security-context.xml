@@ -5,6 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean name="customAuthenticationSuccessHandler" class="com.badger.springweb.CustomAuthenticationSuccessHandler"></bean>
 
     <security:http pattern="/resources/**" security="none" />
     <security:http pattern="/register" security="none" />
@@ -13,16 +14,15 @@
     <security:http>
         <security:intercept-url pattern="/login"
                                 access="hasRole('ANONYMOUS')" />
-        <security:intercept-url pattern="/**"
-                                access="hasRole('ROLE_USER')" />
         <security:intercept-url pattern="/teacher/**"
                                 access="hasRole('ROLE_TEACHER')" />
+        <security:intercept-url pattern="/**"
+                                access="hasRole('ROLE_USER')" />
         <security:form-login login-page="/login"
                              login-processing-url="/j_spring_security_check" authentication-success-handler-ref="customAuthenticationSuccessHandler"/>
         <security:logout logout-url="/logout" />
         <security:csrf disabled="true"/>
     </security:http>
-
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider ref="DBAuthenticationProvider"/>
     </security:authentication-manager>

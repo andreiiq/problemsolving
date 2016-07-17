@@ -41,32 +41,23 @@
 											class="form-control" type="text" />
 									</div>
 
-									<div class="form-group row">
-										<label for="select-skill" class="col-sm-2 form-control-label">Skill</label>
-										<div class="col-sm-4">
-											<select class="form-control select-skill">
-												<option value="Java">Java</option>
-												<option value="PHP">PHP</option>
-												<option value="Javascript">Javascript</option>
-											</select>
-										</div>
-										<div class="col-sm-4">
-											<input type="text" name="skills[Java]" value="2"
-												class="select-level form-control" placeholder="Level">
-										</div>
+									<div class="row">
+										<h4 class="pull-left" style="color: #428bca;">
+											Skills
 											<button type="button"
-												class="add-new-skill btn btn-info btn-circle-sm">
+												class="add-new-search-skill btn btn-info btn-circle-sm">
 												<i class="glyphicon glyphicon-plus"></i>
 											</button>
-											<button type="button"
-												class="remove-skill btn btn-danger btn-circle-sm">
-												<i class="glyphicon glyphicon-minus"></i>
-											</button>
+										</h4>
+									</div>
+
+									<div id="skills-search-container">
 									</div>
 								</div>
 							</div>
 							<span class="input-group-btn"> <input
-								id="current-page-number-ftasks" type="hidden" name="page" value="0" />
+								id="current-page-number-ftasks" type="hidden" name="page"
+								value="0" />
 								<button style="background-color: white; border-color: #5bc0de"
 									id="filter-btn-submit" class="btn btn-secondary" type="button">
 									<span class="pbs-serach-glyph glyphicon glyphicon-search"></span>

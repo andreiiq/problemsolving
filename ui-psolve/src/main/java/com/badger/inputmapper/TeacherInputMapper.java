@@ -1,54 +1,81 @@
 package com.badger.inputmapper;
 
-import com.badger.form.SkillForm;
-import com.badger.form.SubtaskForm;
-import com.badger.form.TaskForm;
-import com.psolve.model.LevelModel;
-import com.psolve.model.SubtaskModel;
-import com.psolve.model.TaskModel;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 4/3/2016.
- */
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.badger.form.SkillForm;
+import com.badger.form.SubtaskForm;
+import com.badger.form.TaskForm;
+import com.badger.service.CourseService;
+import com.badger.service.SkillService;
+import com.badger.service.UserService;
+import com.psolve.model.LevelModel;
+import com.psolve.model.SkillModel;
+import com.psolve.model.SubtaskModel;
+import com.psolve.model.TaskModel;
+import com.psolve.model.TeacherModel;
+
 @Component
 public class TeacherInputMapper {
-    public TaskModel parseAddTaskRequest(TaskForm taskForm) {
-        TaskModel taskModel = new TaskModel();
+	@Autowired
+	SkillService skillService;
 
-        taskModel.setTitle(taskForm.getTitle());
-        taskModel.setDescription(taskForm.getDescription());
-        taskModel.setPointsRewarded(taskForm.getPointsRewarded());
+	@Autowired
+	CourseService courseService;
 
-        List<SubtaskModel> subtaskModels = new ArrayList<>();
-        for (SubtaskForm subtaskForm : taskForm.getSubtasks()) {
+	@Autowired
+	UserService userService;
 
-            SubtaskModel subtaskModel = new SubtaskModel();
-            subtaskModel.setTitle(subtaskForm.getTitle());
-            subtaskModel.setDescription(subtaskForm.getDescription());
+	public TaskModel parseAddTaskRequest(TaskForm taskForm) {
+		TaskModel taskModel = new TaskModel();
 
-            subtaskModel.setParentTask(taskModel);
+		taskModel.setTeacherModel((TeacherModel) userService.getCurrentUser());
+		taskModel.setTitle(taskForm.getTitle());
+		taskModel.setDescription(taskForm.getDescription());
+		taskModel.setPointsRewarded(taskForm.getPointsRewarded());
 
-            subtaskModel.setPointsRewarded(subtaskForm.getPointsRewarded());
+		taskModel.setCourseModel(courseService.getCourse(taskForm.getCourse()));
 
-            List<LevelModel> levelModels = new ArrayList<>();
+		List<SubtaskModel> subtaskModels = new ArrayList<>();
 
-            for (SkillForm skillForm : subtaskForm.getSkills()) {
-                LevelModel levelModel = new LevelModel();
-//                levelModel.setName(skillForm.getName());
-                levelModel.setValue(skillForm.getLevel());
+		if (taskForm.getSubtasks() == null) {
+			return taskModel;
+		}
 
-                levelModels.add(levelModel);
-            }
+		for (SubtaskForm subtaskForm : taskForm.getSubtasks()) {
 
-//            subtaskModel.setLevelsRequired(levelModels);
-            subtaskModels.add(subtaskModel);
-        }
+			SubtaskModel subtaskModel = new SubtaskModel();
+			subtaskModel.setTitle(subtaskForm.getTitle());
+			subtaskModel.setDescription(subtaskForm.getDescription());
 
-        taskModel.setSubtaskModels(subtaskModels);
-        return taskModel;
-    }
+			subtaskModel.setParentTask(taskModel);
+
+			subtaskModel.setPointsRewarded(subtaskForm.getPointsRewarded());
+
+			List<SkillModel> skillModels = new ArrayList<>();
+
+			if (subtaskForm.getSkills() != null) {
+
+				for (SkillForm skillForm : subtaskForm.getSkills()) {
+					SkillModel skillModel = new SkillModel();
+					skillModel.setName(skillForm.getName());
+
+					LevelModel levelModel = skillService.getLevel(skillForm.getLevel());
+					skillModel.setLevelModel(levelModel);
+					skillModel.setExperience(levelModel.getXpObtained());
+
+					skillModels.add(skillModel);
+				}
+			}
+
+			subtaskModel.setSkillsGained(skillModels);
+			subtaskModels.add(subtaskModel);
+		}
+
+		taskModel.setSubtaskModels(subtaskModels);
+		return taskModel;
+	}
 }

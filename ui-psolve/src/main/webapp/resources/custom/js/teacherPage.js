@@ -8,12 +8,21 @@ $(document).ready(
                 $('#cproject-content').removeClass('hidden');
             }
         });
+        
+        $('#view-basic-info').click(function () {
+            var openContent = $('.activity-content-wraper >:not(.hidden)');
+            if (!openContent.hasClass('vbasic-content')) {
+                openContent.addClass('hidden');
+                $('#vbasic-content').removeClass('hidden');
+            }
+        });
 
         $('#search-projects').click(function () {
             var openContent = $('.activity-content-wraper >:not(.hidden)');
             if (!openContent.hasClass('aproject-content')) {
                 openContent.addClass('hidden');
                 $('#aproject-content').removeClass('hidden');
+                $('#filter-btn-submit').trigger('click');
             }
         });
         
@@ -22,6 +31,15 @@ $(document).ready(
             if (!openContent.hasClass('mproject-content')) {
                 openContent.addClass('hidden');
                 $('#mproject-content').removeClass('hidden');
+            }
+        });
+        
+        
+        $('#view-my-mentorships-projects').click(function () {
+            var openContent = $('.activity-content-wraper >:not(.hidden)');
+            if (!openContent.hasClass('mentproject-content')) {
+                openContent.addClass('hidden');
+                $('#mentproject-content').removeClass('hidden');
             }
         });
 
@@ -45,14 +63,23 @@ $(document).ready(
 
         $(document).on('click', '.add-new-subtask', function () {
             var lastEntry = $("#subtask-acordion");
-            var currentLastCollapsable = $('.panel.panel-default:last');
+            var currentLastCollapsable = $('.panel.panel-default.create-subtask:last');
             var number = parseFloat(currentLastCollapsable.attr('number')) + 1;
+            var serverNumber = parseInt(number, 10) - 1;
+            var skillNumber = serverNumber - 1;
+            
+            if (isNaN(number)) {
+            	number = 0;
+            	serverNumber=0;
+            	skillNumber=0;	
+            }
+            
             var htmlToAdd =
-                '<div class="panel panel-default" number="' + number + '">' +
+                '<div class="panel panel-default create-subtask" number="' + number + '">' +
                 '<div class="panel-heading">' +
-                '<h4 class="panel-title">' +
+                '<h4 class="panel-name">' +
                 '<a data-toggle="collapse" data-parent="#subtask-acordion" href="#collapse-subtask-' + number + '">' +
-                'Subtask' + number + '</a>' +
+                'Subtask ' + number + '</a>' +
                 '</h4>' +
                 '<div class="subtask-btn">' +
                 '<button type="button" class="remove-current-subtask btn btn-danger btn-circle-sm"><i class="glyphicon glyphicon-minus"></i></button>  ' +
@@ -63,34 +90,40 @@ $(document).ready(
                 '<div class="form-group row">' +
                 '<label for="subtask-pr" class="col-sm-2 form-control-label">Subtask</label>' +
                 '<div class="col-sm-10">' +
-                '<input type="text" class="form-control subtask-pr" placeholder="Name">' +
+                '<input type="text" class="form-control subtask-pr" placeholder="Name" name="subtasks[' + serverNumber + '].title">' +
                 '</div>' +
                 '</div>' +
                 '<div class="form-group row">' +
                 '<label for="subtask-desc-pr" class="col-sm-2 form-control-label">Info</label>' +
                 '<div class="col-sm-10">' +
-                '<input type="text" class="form-control subtask-desc-pr" placeholder="Info">' +
+                '<input type="text" class="form-control subtask-desc-pr" placeholder="Info"  name="subtasks[' + serverNumber + '].description">' +
                 '</div></div>' +
                 '<div class="form-group row">' +
                 '<label for="points-pr" class="col-sm-2 form-control-label">Points</label>' +
                 '<div class="col-sm-10">' +
-                '<input class=" points-pr range-input form-control" type="range" data-toggle="popover" data-content="12" name="rangeInput" min="0" max="999"/>' +
+                '<input class=" points-pr range-input form-control" type="range" data-toggle="popover" data-content="12" name="subtasks[' + serverNumber + '].pointsRewarded" min="0" max="999"/>' +
                 '</div>' +
                 '</div>' +
-                '<div class="form-group row">' +
+            	'<div class="row">' +
+				'<h4 class="pull-lef" style="color: #428bca;">' +
+					'Skills' +
+					'<button type="button"' +
+						'class="add-new-skill btn btn-info btn-circle-sm">' +
+						'<i class="glyphicon glyphicon-plus"></i>' +
+					'</button>' +
+				'</h4>' +
+				'</div>' +
+                '<div class="form-group row skill-selection" number="[' + skillNumber + ']" ">' +
                 '<label for="select-skill" class="col-sm-2 form-control-label">Skill</label>' +
                 '<div class="col-sm-4">' +
-                '<select class="form-control select-skill" >' +
+                '<select class="form-control select-skill" name="subtasks[' + serverNumber + '].skills[0].name" >' +
                 '<option>Java</option>' +
                 '<option>PHP</option>' +
                 '<option>Javascript</option>' +
                 '</select>' +
                 '</div>' +
                 '<div class="col-sm-4">' +
-                '<input type="text" class="form-control select-level" placeholder="Level">' +
-                '</div>' +
-                '<div class="col-sm-1">' +
-                '<button type="button" class="add-new-skill btn btn-info btn-circle-sm"><i class="glyphicon glyphicon-plus"></i></button>' +
+                '<input type="text" class="form-control select-level" placeholder="Level" name="subtasks[' + serverNumber + '].skills[0].level">' +
                 '</div>' +
                 '<div>' +
                 '<button type="button" class="remove-skill btn btn-danger btn-circle-sm"><i class="glyphicon glyphicon-minus"></i></button>' +
@@ -101,18 +134,44 @@ $(document).ready(
                 '</div>';
 
             lastEntry.append(htmlToAdd);
-//			 positionAddRemoveButtons();
 
         });
         $(document).on('click', '.remove-current-subtask', function () {
             var deleteEntry = this.closest('.panel.panel-default');
             deleteEntry.remove();
-//			   positionAddRemoveButtons();
 
         });
         $(document).on('click', '.add-new-skill', function () {
-            var container = $(this).closest('.form-group.row');
-            container.parents(':eq(0)').append(container.get(0).outerHTML);
+            var container = $('.skill-selection:last');
+            console.log(container);
+            var number = container.attr("number").replace('[', '').replace(']', '');;
+            ++number;
+            
+            var htmlToAdd = container.get(0).outerHTML;
+            var htmlToAdd = htmlToAdd.replace(/skills\[[0-9]\]/g, 'skills[' + number +']');
+            var htmlToAdd = htmlToAdd.replace(/number="\[[0-9]\]"/g, 'number="[' + number +']"');
+            container.parents(':eq(0)').append(htmlToAdd);
+        });
+        
+        $(document).on('click', '.add-new-search-skill', function () {
+            var container = $('#skills-search-container');
+        	var htmlToAdd = '<div class="form-group row">'+
+			'<label for="select-skill" class="col-sm-2 form-control-label">Skill</label>'+
+			'<div class="col-sm-4">'+
+				'<select class="form-control select-skill">'+
+					'<option value="Java">Java</option>'+
+					'<option value="PHP">PHP</option>'+
+					'<option value="Javascript">Javascript</option>'+
+				'</select>'+
+			'</div>'+
+			'<div class="col-sm-4">'+
+				'<input type="text" name="skills[Java]" value="10"'+
+					'class="select-level form-control" placeholder="Level">'+
+			'</div>'+
+			'<button type="button" class="remove-skill btn btn-danger btn-circle-sm"><i class="glyphicon glyphicon-minus"></i></button>  ' +
+			'</button>'+
+		'</div>';
+        	container.append(htmlToAdd);
         });
 
         $(document).on('click', '.remove-skill', function () {
@@ -135,7 +194,7 @@ $(document).ready(
         });
 
         $('#accept-reset-project-form').click(function () {
-            $('#create-project-form').load("/badger/teacher/getCreateProjectForm");
+            $('#create-project-form').load(ctx+'/teacher/getCreateProjectForm');
             $('.modal-backdrop.fade.in').remove();
         });
 
@@ -165,7 +224,6 @@ $(document).ready(
                  dataType: 'json',	
                  data: form.serializeObject(),
                  success: function (data) {
-                 	console.log(data);
                  	$.each(data, function(key, value) { 
                  		html = html.concat('<div class="solution-wraper row">' +
                 		'<div class="panel panel-default">' +
@@ -173,9 +231,8 @@ $(document).ready(
              		     '<h3 class="panel-name">'+ key +'</h3>' +
              			'</div><div class="panel-body">');
     	                 $.each( value, function( index, solution){
-    	                	console.log(solution);
     	                	html = html.concat('<div class="solution col-lg-3">' +
-    	                			'<a href="'+ ctx +'/teacher/downloadSolution/'+solution.id+'" download>'+		
+    	                			'<a href="'+ ctx +'/downloadSolution/'+solution.id+'" download>'+		
                  					'<img class="solution-img img-responsive img-thumbnail"' +
                  					'src="'+ ctx +'/resources/images/archive_icon.png"/></a> <span class="hover-color text-center">'+ solution.projectName +'</span>' +
                  				     '</div>');

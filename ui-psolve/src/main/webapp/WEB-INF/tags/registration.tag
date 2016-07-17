@@ -8,7 +8,7 @@
 	rel="stylesheet" />
 </head>
 
-<div class="modal fade" id="registrationModal" tabindex="-1"
+<div class="modal fade" id="reg" tabindex="-1"
 	role="dialog" aria-labelledby="registrationModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -62,14 +62,6 @@
 							<input name="lastname" type="text" class="form-control"
 								placeholder="Lastname" required/>
 						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-lg-3">Education</label>
-						<div class="input-group col-lg-7">
-							<input name="education" type="text" class="form-control"
-								placeholder="Education" required/>
-						</div>
-						<span class="clearfix"></span>
 					</div>
 				</div>
 				<div class="modal-footer">

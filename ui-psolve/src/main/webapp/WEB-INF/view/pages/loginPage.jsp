@@ -8,8 +8,7 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Bootstrap -->
-<link href="<c:url value="/resources/web/css/bootstrap.css"/>"
+<link href="<c:url value="/resources/web/css/bootstrap.min.css"/>"
 	rel="stylesheet">
 <link href="<c:url value="/resources/web/css/bootstrap-social.css"/>"
 	rel="stylesheet">
@@ -17,39 +16,58 @@
 	rel="stylesheet">
 <link href="<c:url value="/resources/web/css/docs.css"/>"
 	rel="stylesheet">
-<script src="<c:url value="/resources/web/js/jquery-1.11.2.min.js"/>"></script>
-<script src="<c:url value="/resources/web/js/bootstrap.js"/>"></script>
-<link href="<c:url value="/resources/custom/css/login.css"/>"
+<link href="<c:url value="/resources/custom/css/range.css"/>"
 	rel="stylesheet">
+
+
+<script
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script
+	src="<c:url value="/resources/web/js/bootstrap-typeahead.min.js"/>"></script>
+
+<script src="<c:url value="/resources/custom/js/common.js"/>"></script>
+
+<script
+	src="<c:url value="/resources/web/js/jquery.autocomplete.min.js"/>"></script>
+
+
+
+<link href="<c:url value="/resources/custom/css/teacherPage.css"/>"
+	rel="stylesheet">
+<link href="<c:url value="/resources/custom/css/common.css"/>"
+	rel="stylesheet">
+	<link href="<c:url value="/resources/custom/css/login.css"/>"
+	rel="stylesheet">
+<title>Login</title>
 </head>
 <body>
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6 col-md-4 col-md-offset-4">
-				<h1 class="text-center login-name">Problem Solving</h1>
+				<h1 class="text-center login-name">Collaborative Problem Solving</h1>
 				<div class="account-wall">
-					<img class="profile-img"
-						src="https://s-media-cache-ak0.pinimg.com/736x/81/b1/3e/81b13eb4b2c344db9fcdd206976c3b5c.jpg"
-						alt="">
+					<img id="logo-login-img"
+						class="img-responsive center-block img-thumbnail"
+						src="<c:url value="/resources/images/logo2.png"/>">
 					<c:url value="/j_spring_security_check" var="loginURL" />
 					<form:form class="form-signin" action="${loginURL}" method="POST">
 						<input name="username" type="text" class="form-control"
 							placeholder="Email" required autofocus>
+														<br>
 						<input name="password" type="password" class="form-control"
 							placeholder="Password" required>
 						<button class="btn btn-lg btn-primary btn-block" type="submit">
 							Sign in</button>
-						<label class="checkbox pull-left"> <input
-							path="rememberMe" type="checkbox" value="remember-me">
-							Remember me
-						</label>
-						<a href="#" class="pull-right need-help">Need help? </a>
 						<span class="clearfix"></span>
 					</form:form>
 				</div>
 				<a href="#" class="text-center new-account" data-toggle="modal"
-					data-target="#registrationModal">Create an account </a>
-				<badger:registration/>
+					data-target="#reg">Create an account </a>
+				<badger:registration />
 			</div>
 		</div>
 	</div>

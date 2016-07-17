@@ -1,2 +1,10 @@
-notif.task.invite.message={0} invited you to join task {1}.
-notif.mentor.invite.message={0} invited you to be a mentor for his task {1}.
+notif.task.invite.message={0} invited you to join subtask {1}.
+notif.mentor.invite.message={0} invited you to be a mentor for his subtask {1}.
+
+notif.task.invite.accepted.message={0} accepted to join subtask {1}.
+notif.task.invite.decline.message={0} declined to join subtask {1}.
+
+notif.task.invite.accepted.sender.message=You accepted to join subtask {0}.
+notif.task.invite.declined.sender.message=You declined to join subtask {0}.
+
+notif.task.submitted.solution={0} submitted solution to task {1}.

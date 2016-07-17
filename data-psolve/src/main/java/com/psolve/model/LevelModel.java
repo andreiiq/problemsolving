@@ -22,6 +22,8 @@ public class LevelModel {
 	@Column(name = "xp_needed")
 	private Double xpNeeded;
 
+	@Column
+	private Double xpObtained;
 
 	@Column(name = "capped")
 	private Boolean capped;
@@ -53,7 +55,6 @@ public class LevelModel {
 		this.xpNeeded = xpNeeded;
 	}
 
-
 	public Boolean getCapped() {
 		return capped;
 	}
@@ -69,4 +70,17 @@ public class LevelModel {
 	public void setNextLevelModel(LevelModel nextLevelModel) {
 		this.nextLevelModel = nextLevelModel;
 	}
+
+	public Double getXpObtained() {
+		return xpObtained;
+	}
+
+	public void setXpObtained(Double xpObtained) {
+		this.xpObtained = xpObtained;
+	}
+
+	public void setXpNeeded(Double xpNeeded) {
+		this.xpNeeded = xpNeeded;
+	}
+	
 }

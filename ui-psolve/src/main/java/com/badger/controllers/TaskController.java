@@ -2,6 +2,8 @@ package com.badger.controllers;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.badger.dto.SkillDTO;
+import com.badger.dto.SolutionDTO;
 import com.badger.dto.SubtaskDTO;
 import com.badger.dto.TaskDTO;
-import com.badger.form.SubtaskForm;
 import com.badger.form.TaskForm;
 import com.badger.service.EvaluationService;
 import com.badger.service.TaskService;
 import com.badger.service.UserService;
+import com.psolve.model.AbstractTaskModel;
 import com.psolve.model.SkillModel;
 import com.psolve.model.StudentModel;
 import com.psolve.model.SubtaskModel;
@@ -56,14 +59,18 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "/evaluateTask", method = RequestMethod.POST)
-	public ResponseEntity<String> evaluatTask(@RequestBody TaskForm taskForm) {
-		TaskModel taskModel = (TaskModel) taskService.findTaskByID(taskForm.getId());
-		evaluationService.evaluateTask(taskModel, taskForm.getGrade());
+	public ResponseEntity<String> evaluatTask(@RequestBody Map<Integer, Long> evaluations) {
+		System.out.println(evaluations);
+		for (Entry<Integer, Long> entry : evaluations.entrySet()) {
+			AbstractTaskModel abstractTaskModel = taskService.findTaskByID(entry.getKey());
 
-		List<SubtaskForm> subtaskForms = taskForm.getSubtasks();
-		for (SubtaskForm subtaskForm : subtaskForms) {
-			SubtaskModel subtaskModel = (SubtaskModel) taskService.findTaskByID(subtaskForm.getId());
-			evaluationService.evaluateTask(subtaskModel, subtaskForm.getGrade());
+			if (abstractTaskModel instanceof TaskModel) {
+				evaluationService.evaluateTask((TaskModel) abstractTaskModel, entry.getValue());
+			}
+
+			if (abstractTaskModel instanceof SubtaskModel) {
+				evaluationService.evaluateTask((SubtaskModel) abstractTaskModel, entry.getValue());
+			}
 
 		}
 
@@ -74,9 +81,12 @@ public class TaskController {
 		TaskDTO taskDTO = new TaskDTO();
 
 		taskDTO.setId(taskModel.getId());
+		taskDTO.setTeacherEmail(taskModel.getTeacherModel().getEmail());
 		taskDTO.setTitle(taskModel.getTitle());
 		taskDTO.setDescription(taskModel.getDescription());
-		taskDTO.setOwnerEmail(taskModel.getStudent().getEmail());
+		if (taskModel.getStudent() != null) {
+			taskDTO.setOwnerEmail(taskModel.getStudent().getEmail());
+		}
 
 		StudentModel studentModel = taskModel.getStudent();
 
@@ -88,6 +98,11 @@ public class TaskController {
 
 		if (taskModel.getSolutionModel() != null) {
 			taskDTO.setHasSolution(true);
+
+			SolutionDTO solutionDTO = new SolutionDTO();
+			solutionDTO.setId(taskModel.getSolutionModel().getId());
+			solutionDTO.setProjectName(taskModel.getTitle());
+			taskDTO.setSolutionDTO(solutionDTO);
 		}
 
 		List<SubtaskDTO> subtaskDTOs = new LinkedList<>();
@@ -96,12 +111,20 @@ public class TaskController {
 		for (SubtaskModel subtaskModel : taskModel.getSubtaskModels()) {
 			SubtaskDTO subtaskDTO = new SubtaskDTO();
 
+			if (subtaskModel.getStudent() != null) {
+				subtaskDTO.setOwner(subtaskModel.getStudent().getEmail());
+				if (subtaskModel.getTutor() != null) {
+					subtaskDTO.setMentor(subtaskModel.getTutor().getEmail());
+				}
+			}
+
 			List<SkillDTO> skillDTOs = new LinkedList<>();
 			subtaskDTO.setSkills(skillDTOs);
 
 			subtaskDTO.setId(subtaskModel.getId());
 			subtaskDTO.setTitle(subtaskModel.getTitle());
 			subtaskDTO.setDescription(subtaskModel.getDescription());
+			subtaskDTO.setPoints(subtaskModel.getPointsRewarded());
 
 			for (SkillModel skillModel : subtaskModel.getSkillsGained()) {
 				SkillDTO skillDTO = new SkillDTO();

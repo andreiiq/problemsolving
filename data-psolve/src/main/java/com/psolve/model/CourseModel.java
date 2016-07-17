@@ -11,9 +11,12 @@ public class CourseModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@Column(name = "title")
+
+	@Column(name = "title", unique = true)
 	private String title;
+
+	@Column(name = "description")
+	private String description;
 
 	public Long getId() {
 		return id;
@@ -30,5 +33,13 @@ public class CourseModel {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

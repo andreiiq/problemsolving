@@ -16,10 +16,10 @@ public class StudentModel extends AbstractUserModel {
 	@Column(name = "skypeID")
 	private String skypeID;
 
-	@OneToMany
+	@OneToMany(mappedBy = "owner")
 	private List<CoursePointsModel> points;
 
-	@OneToMany(mappedBy = "student")
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
 	private List<SkillModel> skills;
 
 	@OneToMany(mappedBy = "student")

@@ -19,18 +19,24 @@ public class AssigntationController {
 	@Autowired
 	NotificationService notificationService;
 
-	@RequestMapping(value = "/assignTask", method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<String> assignTask(@RequestBody AssignSubtaskForm subtaskForm) {
+	@RequestMapping(value = "/assignTask", method = RequestMethod.POST)
+	public ResponseEntity<String> assignTask(AssignSubtaskForm subtaskForm) {
 		String email = subtaskForm.getReceiverEmail();
 		long taskID = subtaskForm.getSubtaskID();
 
 		notificationService.sendAssignToTaskNotification(email, taskID);
-		
+
 		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
 	}
 
-	@RequestMapping(value = "/assignMentor", method = RequestMethod.POST, consumes = "application/json")
-	public void assignMentor(@RequestParam String email, @RequestParam long taskID) {
+	@RequestMapping(value = "/assignMentor", method = RequestMethod.POST)
+	public ResponseEntity<String> assignMentor(AssignSubtaskForm subtaskForm) {
+		String email = subtaskForm.getReceiverEmail();
+		long taskID = subtaskForm.getSubtaskID();
+
+		notificationService.sendAssignAsMentorNotification(email, taskID);
+
+		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
 	}
 
 }

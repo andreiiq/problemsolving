@@ -1,27 +1,39 @@
 .progress-bar {
-    -webkit-transition: width 1.5s ease-in-out;
-    transition: width 1.5s ease-in-out;
+	-webkit-transition: width 1.5s ease-in-out;
+	transition: width 1.5s ease-in-out;
 }
 
 #profile-img {
-    width: 173.91304px;
-    height: 173.91304px;;
-    background-position: center center;
-    background-repeat: no-repeat;
-    z-index: 700;
+	width: 173.91304px;
+	height: 173.91304px;;
+	background-position: center center;
+	background-repeat: no-repeat;
+	z-index: 700;
 }
 
 .pbs-profile {
-    background-color: #337ab7;
+	background-color: #337ab7;
 }
 
 .dropdown-element:hover {
-	color: #337ab7;	
+	color: #337ab7;
 }
 
-
 .scrollable-menu {
-    height: auto;
-    max-height: 200px;
-    overflow-x: hidden;
+	height: auto;
+	max-height: 200px;
+	overflow-x: hidden;
+}
+
+.dropdown-menu {
+	width: 400px !important;
+	height: 400px !important;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.navbar-default {
+	border-color: #ffffff;
 }

@@ -29,6 +29,11 @@ public class DefaultSolutionService implements SolutionService {
 
 	@Autowired
 	TaskService taskService;
+	
+
+	@Autowired
+	TaskService taskRepo;
+
 
 	@Autowired
 	SolutionRepo solutionRepo;
@@ -45,11 +50,6 @@ public class DefaultSolutionService implements SolutionService {
 
 		TaskModel task = (TaskModel) taskService.findTaskByID(taskId);
 		StudentModel user = task.getStudent();
-
-		boolean isAuthorized = authorizationService.isAuthorized(user);
-		if (!isAuthorized) {
-			throw new NotAuthorizedException();
-		}
 
 		SolutionModel existingSolution = task.getSolutionModel();
 
@@ -71,11 +71,13 @@ public class DefaultSolutionService implements SolutionService {
 			solutionModel.setTeacher(teacherOwner);
 
 			solutionModel.setUploadTime(Calendar.getInstance());
+			task.setSolutionModel(solutionModel);
 
 			fileManager.buildSolutionPath(solutionModel, user, task);
 			fileManager.uploadSolution(solutionModel);
-
+			
 			solutionRepo.save(solutionModel);
+			taskRepo.saveTask(task);
 		}
 	}
 

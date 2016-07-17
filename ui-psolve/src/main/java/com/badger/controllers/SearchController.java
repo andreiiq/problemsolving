@@ -61,9 +61,23 @@ public class SearchController {
 	}
 
 	@ResponseBody
+	@RequestMapping(path = "/findUserMentorTasks", method = RequestMethod.POST, produces = "application/json")
+	public ProjectSearchDTO getUserMentorTasks(@RequestBody TaskFilterForm filter) {
+		Page<TaskModel> tasks = searchService.getTasksWithCurrentUserMentor(filter.getPage());
+		return buildFilterSearchResponse(tasks, filter.getPage());
+	}
+
+	@ResponseBody
 	@RequestMapping(path = "/findAllEligibleUsers", method = RequestMethod.GET, produces = "application/json")
-	public UserSearchDTO getStudentsEligibleForSubtask(@RequestParam String name) {
-		List<StudentModel> students = searchService.getStudentsByName(name);
+	public UserSearchDTO getStudentsEligibleForSubtask(@RequestParam String name, @RequestParam long taskId) {
+		List<StudentModel> students = searchService.getStudentsWithSkillsForSubtask(name, taskId);
+		return buildUserSearchResponse(students);
+	}
+
+	@ResponseBody
+	@RequestMapping(path = "/findAllEligibleMentors", method = RequestMethod.GET, produces = "application/json")
+	public UserSearchDTO getMentorsEligibleForSubtask(@RequestParam String name, @RequestParam long subtaskId) {
+		List<StudentModel> students = searchService.getStudentsWithSkillsForSubtask(name, subtaskId);
 		return buildUserSearchResponse(students);
 	}
 
@@ -77,6 +91,7 @@ public class SearchController {
 		for (TaskModel taskModel : tasks) {
 			TaskDTO taskModelResponse = new TaskDTO();
 			taskModelResponse.setId(taskModel.getId());
+			taskModelResponse.setCourse(taskModel.getCourseModel().getTitle());
 			taskModelResponse.setTitle(taskModel.getTitle());
 			taskModelResponse.setDescription(taskModel.getDescription());
 			taskModelResponse.setCourse(taskModel.getCourseModel().getTitle());

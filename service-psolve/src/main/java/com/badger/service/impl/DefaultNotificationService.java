@@ -17,11 +17,16 @@ import com.psolve.dao.QueryNotificationRepo;
 import com.psolve.model.AbstractNotificationModel;
 import com.psolve.model.AbstractQueryNotificationModel;
 import com.psolve.model.AbstractUserModel;
+import com.psolve.model.AcceptedInvitationNotificationModel;
+import com.psolve.model.DeclinedInvitationNotificationModel;
 import com.psolve.model.InviteMentorNotificationModel;
 import com.psolve.model.InviteTaskNotificationModel;
 import com.psolve.model.NotificationStatus;
 import com.psolve.model.StudentModel;
+import com.psolve.model.SubmitedSolutionNotification;
 import com.psolve.model.SubtaskModel;
+import com.psolve.model.TaskModel;
+import com.psolve.model.TeacherModel;
 
 @Service
 public class DefaultNotificationService implements NotificationService {
@@ -43,12 +48,26 @@ public class DefaultNotificationService implements NotificationService {
 	@Value("${notif.mentor.invite.message}")
 	private String inviteMentorMessage;
 
+	@Value("${notif.task.invite.accepted.message}")
+	private String acceptedSubtaskInviteMessage;
+
+	@Value("${notif.task.invite.decline.message}")
+	private String declinedSubtaskInviteMessage;
+
+	@Value("${notif.task.invite.accepted.sender.message}")
+	private String acceptedSenderSubtaskInviteMessage;
+
+	@Value("${notif.task.invite.declined.sender.message}")
+	private String declinedSenderSubtaskInviteMessage;
+	
+	@Value("${notif.task.submitted.solution}")
+	private String submiteSolutionMessage;
+
 	@Override
-	public List<AbstractQueryNotificationModel> getNewNotifications() {
+	public List<AbstractNotificationModel> getNewNotifications() {
 		AbstractUserModel user = userService.getCurrentUser();
 
-		List<AbstractQueryNotificationModel> notifications = queryNotificationRepo
-				.findByOwnerAndStatusOrderByCreatedAtAsc(user, NotificationStatus.PENDING);
+		List<AbstractNotificationModel> notifications = notifRepo.findByOwnerOrderByCreatedAtAsc(user);
 		buildNotificationMessages(notifications);
 
 		for (AbstractNotificationModel notification : notifications) {
@@ -68,8 +87,19 @@ public class DefaultNotificationService implements NotificationService {
 		SubtaskModel subtask = getSubtaskModel(notification);
 		notification.setStatus(NotificationStatus.ACCEPTED);
 
-		subtask.setStudent((StudentModel) userService.getCurrentUser());
+		if (notification instanceof InviteTaskNotificationModel) {
+			subtask.setStudent((StudentModel) userService.getCurrentUser());
+		}
+
+		if (notification instanceof InviteMentorNotificationModel) {
+			subtask.setTutor((StudentModel) userService.getCurrentUser());
+		}
+
+		AcceptedInvitationNotificationModel notificationModel = buildAcceptInviteNotification(subtask,
+				(StudentModel) notification.getSender());
+
 		taskService.saveTask(subtask);
+		notifRepo.save(notificationModel);
 		queryNotificationRepo.save(notification);
 	}
 
@@ -78,7 +108,14 @@ public class DefaultNotificationService implements NotificationService {
 		AbstractQueryNotificationModel notification = (AbstractQueryNotificationModel) this
 				.findNotificationByID(notificationID);
 
+		SubtaskModel subtask = getSubtaskModel(notification);
+
 		notification.setStatus(NotificationStatus.REJECTED);
+
+		DeclinedInvitationNotificationModel notificationModel = buildDeclineInvitationNotification(subtask,
+				(StudentModel) notification.getSender());
+
+		notifRepo.save(notificationModel);
 		queryNotificationRepo.save(notification);
 	}
 
@@ -89,14 +126,15 @@ public class DefaultNotificationService implements NotificationService {
 
 	@Override
 	public long countNotSeenNotifications() {
-		return notifRepo.countByUnseenIsFalse();
+		AbstractUserModel userModel = userService.getCurrentUser();
+		return notifRepo.countByUnseenIsFalseAndOwner(userModel);
 	}
 
 	@Override
 	public void sendAssignToTaskNotification(String receiverEmail, long taskID) {
 		StudentModel student = (StudentModel) userService.findUserByEmail(receiverEmail);
 		SubtaskModel subtask = (SubtaskModel) taskService.findTaskByID(taskID);
-		
+
 		notifRepo.save(buildInviteToTaskNotification(subtask, student));
 	}
 
@@ -109,12 +147,22 @@ public class DefaultNotificationService implements NotificationService {
 
 	}
 
+	@Override
+	public void sendSubmitSolutionNotification(String receiverEmail, long taskID) {
+		TeacherModel teacherModel = (TeacherModel) userService.findUserByEmail(receiverEmail);
+		TaskModel taskModel = (TaskModel) taskService.findTaskByID(taskID);
+
+		notifRepo.save(buildSolutionNotification(taskModel, teacherModel));
+
+	}
+
 	private InviteTaskNotificationModel buildInviteToTaskNotification(SubtaskModel subtask, StudentModel student) {
 		InviteTaskNotificationModel notificationModel = new InviteTaskNotificationModel();
 
 		notificationModel.setStatus(NotificationStatus.PENDING);
 		notificationModel.setSubtask(subtask);
 		notificationModel.setOwner(student);
+		notificationModel.setSender(userService.getCurrentUser());
 		return notificationModel;
 	}
 
@@ -124,10 +172,40 @@ public class DefaultNotificationService implements NotificationService {
 		notificationModel.setStatus(NotificationStatus.PENDING);
 		notificationModel.setSubtask(subtask);
 		notificationModel.setOwner(student);
+		notificationModel.setSender(userService.getCurrentUser());
 		return notificationModel;
 	}
 
-	private SubtaskModel getSubtaskModel(AbstractQueryNotificationModel notification) {
+	private AcceptedInvitationNotificationModel buildAcceptInviteNotification(SubtaskModel subtask,
+			StudentModel student) {
+		AcceptedInvitationNotificationModel notificationModel = new AcceptedInvitationNotificationModel();
+
+		notificationModel.setSubtask(subtask);
+		notificationModel.setOwner(student);
+		notificationModel.setSender(userService.getCurrentUser());
+		return notificationModel;
+	}
+
+	private DeclinedInvitationNotificationModel buildDeclineInvitationNotification(SubtaskModel subtask,
+			StudentModel student) {
+		DeclinedInvitationNotificationModel declinedNotification = new DeclinedInvitationNotificationModel();
+
+		declinedNotification.setSubtask(subtask);
+		declinedNotification.setOwner(student);
+		declinedNotification.setSender(userService.getCurrentUser());
+		return declinedNotification;
+	}
+
+	private SubmitedSolutionNotification buildSolutionNotification(TaskModel taskModel, TeacherModel teacherModel) {
+		SubmitedSolutionNotification notificationModel = new SubmitedSolutionNotification();
+
+		notificationModel.setTask(taskModel);
+		notificationModel.setOwner(teacherModel);
+		notificationModel.setSender(userService.getCurrentUser());
+		return notificationModel;
+	}
+
+	public SubtaskModel getSubtaskModel(AbstractQueryNotificationModel notification) {
 		if (notification instanceof InviteMentorNotificationModel) {
 			return ((InviteMentorNotificationModel) notification).getSubtask();
 		}
@@ -137,18 +215,60 @@ public class DefaultNotificationService implements NotificationService {
 		return null;
 	}
 
-	private void buildNotificationMessages(List<AbstractQueryNotificationModel> notifs) {
-		for (AbstractQueryNotificationModel notif : notifs) {
+	private void buildNotificationMessages(List<AbstractNotificationModel> notifs) {
+		for (AbstractNotificationModel notif : notifs) {
 			AbstractUserModel user = notif.getOwner();
 			if (notif instanceof InviteTaskNotificationModel) {
 				SubtaskModel subtask = ((InviteTaskNotificationModel) notif).getSubtask();
-				notif.setMessage(buildInviteTaskMesssage(user, subtask));
+
+				String notifMessage;
+				switch (((InviteTaskNotificationModel) notif).getStatus()) {
+				case ACCEPTED:
+					notifMessage = MessageFormat.format(acceptedSenderSubtaskInviteMessage, subtask.getTitle());
+					break;
+				case REJECTED:
+					notifMessage = MessageFormat.format(declinedSenderSubtaskInviteMessage, subtask.getTitle());
+					break;
+				default:
+					notifMessage = buildInviteTaskMesssage(notif.getSender(), subtask);
+					break;
+				}
+				notif.setMessage(notifMessage);
 			}
 
 			if (notif instanceof InviteMentorNotificationModel) {
 				SubtaskModel subtask = ((InviteMentorNotificationModel) notif).getSubtask();
-				notif.setMessage(buildInviteMentorMesssage(user, subtask));
+
+				String notifMessage;
+				switch (((InviteMentorNotificationModel) notif).getStatus()) {
+				case ACCEPTED:
+					notifMessage = MessageFormat.format(acceptedSenderSubtaskInviteMessage, subtask.getTitle());
+					break;
+				case REJECTED:
+					notifMessage = MessageFormat.format(declinedSenderSubtaskInviteMessage, subtask.getTitle());
+					break;
+				default:
+					notifMessage = buildInviteMentorMesssage(notif.getSender(), subtask);
+					break;
+				}
+				notif.setMessage(notifMessage);
 			}
+
+			if (notif instanceof AcceptedInvitationNotificationModel) {
+				SubtaskModel subtask = ((AcceptedInvitationNotificationModel) notif).getSubtask();
+				notif.setMessage(buildAcceptedSubtaskMessage(notif.getSender(), subtask));
+			}
+
+			if (notif instanceof DeclinedInvitationNotificationModel) {
+				SubtaskModel subtask = ((DeclinedInvitationNotificationModel) notif).getSubtask();
+				notif.setMessage(builddeclinedSubtaskMessage(notif.getSender(), subtask));
+			}
+			
+			if (notif instanceof SubmitedSolutionNotification) {
+				TaskModel taskModel = ((SubmitedSolutionNotification) notif).getTask();
+				notif.setMessage(buildSubmitSolutionMessage(notif.getSender(), taskModel));
+			}
+
 		}
 	}
 
@@ -161,7 +281,41 @@ public class DefaultNotificationService implements NotificationService {
 		return notifMessage;
 	}
 
+	private String buildAcceptedSubtaskMessage(AbstractUserModel user, SubtaskModel subtask) {
+		String firstName = user.getFirstname();
+		String lastName = user.getLastname();
+
+		String subtaskTitle = subtask.getTitle();
+		String notifMessage = MessageFormat.format(acceptedSubtaskInviteMessage, firstName + " " + lastName,
+				subtaskTitle);
+		return notifMessage;
+	}
+
+	private String builddeclinedSubtaskMessage(AbstractUserModel user, SubtaskModel subtask) {
+		String firstName = user.getFirstname();
+		String lastName = user.getLastname();
+
+		String subtaskTitle = subtask.getTitle();
+		String notifMessage = MessageFormat.format(acceptedSubtaskInviteMessage, firstName + " " + lastName,
+				subtaskTitle);
+		return notifMessage;
+	}
+
 	private String buildInviteMentorMesssage(AbstractUserModel user, SubtaskModel subtask) {
-		return buildInviteTaskMesssage(user, subtask);
+		String firstName = user.getFirstname();
+		String lastName = user.getLastname();
+
+		String subtaskTitle = subtask.getTitle();
+		String notifMessage = MessageFormat.format(inviteMentorMessage, firstName + " " + lastName, subtaskTitle);
+		return notifMessage;
+	}
+	
+	private String buildSubmitSolutionMessage(AbstractUserModel user, TaskModel taskModel) {
+		String firstName = user.getFirstname();
+		String lastName = user.getLastname();
+
+		String subtaskTitle = taskModel.getTitle();
+		String notifMessage = MessageFormat.format(submiteSolutionMessage, firstName + " " + lastName, subtaskTitle);
+		return notifMessage;
 	}
 }

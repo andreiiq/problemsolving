@@ -5,13 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.badger.strategy.EvaluationStrategy;
-import com.psolve.dao.AbstractTaskRepo;
 import com.psolve.dao.CoursePointsRepo;
 import com.psolve.dao.LevelRepo;
 import com.psolve.dao.StudentRepo;
-import com.psolve.model.AbstractTaskModel;
 import com.psolve.model.CourseModel;
 import com.psolve.model.CoursePointsModel;
 import com.psolve.model.LevelModel;
@@ -41,7 +40,11 @@ public class DefaultEvaluationStrategy implements EvaluationStrategy {
 	@Value("${exprate-for-low-level}")
 	private double rateForLowerLevel;
 
+	@Value("${percentage-points-for-mentor}")
+	private double mentorPercentage;
+
 	@Override
+	@Transactional
 	public void evaluateStudent(StudentModel student, TaskModel task, long grade) {
 		double pointsRewarded = computeReceivedPoints(task.getPointsRewarded(), grade);
 
@@ -57,13 +60,19 @@ public class DefaultEvaluationStrategy implements EvaluationStrategy {
 
 		double points = coursePoints.getPoints();
 		coursePoints.setPoints(points + pointsRewarded);
-		student.getPoints().add(coursePoints);
+
+		coursePointsRepo.save(coursePoints);
 
 		studentRepo.save(student);
 	}
 
 	@Override
+	@Transactional
 	public void evaluateStudent(StudentModel student, SubtaskModel subtask, long grade) {
+		if (student == null) {
+			return;
+		}
+
 		double pointsRewarded = computeReceivedPoints(subtask.getPointsRewarded(), grade);
 
 		TaskModel project = subtask.getParentTask();
@@ -79,7 +88,22 @@ public class DefaultEvaluationStrategy implements EvaluationStrategy {
 
 		double points = coursePoints.getPoints();
 		coursePoints.setPoints(points + pointsRewarded);
-		student.getPoints().add(coursePoints);
+
+		StudentModel tutor = subtask.getTutor();
+		if (tutor != null) {
+
+			CoursePointsModel tutorPoints = coursePointsRepo.findByOwnerAndCourse(tutor, course);
+			if (tutorPoints == null) {
+				tutorPoints = new CoursePointsModel();
+				tutorPoints.setCourse(course);
+				tutorPoints.setOwner(tutor);
+
+			}
+			tutorPoints.setPoints(tutorPoints.getPoints() + (pointsRewarded * mentorPercentage));
+
+			coursePointsRepo.save(tutorPoints);
+		}
+		coursePointsRepo.save(coursePoints);
 
 		List<SkillModel> existingSkills = student.getSkills();
 		List<SkillModel> gainedSkills = subtask.getSkillsGained();
@@ -93,7 +117,12 @@ public class DefaultEvaluationStrategy implements EvaluationStrategy {
 					}
 				}
 			} else {
-				existingSkills.add(gainedSkill);
+				SkillModel newSkill = new SkillModel();
+				newSkill.setLevelModel(gainedSkill.getLevelModel());
+				newSkill.setName(gainedSkill.getName());
+				newSkill.setStudent(student);
+				addExperience(newSkill, gainedSkill);
+				existingSkills.add(newSkill);
 			}
 		}
 
@@ -112,14 +141,18 @@ public class DefaultEvaluationStrategy implements EvaluationStrategy {
 		LevelModel levelModel = existingSkill.getLevelModel();
 		double expNeededForLevelUp = levelModel.getXpNeeded();
 
-		if (sum > expNeededForLevelUp) {
-			long currentLevelValue = levelModel.getValue();
-			LevelModel nextLevel = levelRepo.findByValue(currentLevelValue + 1);
+		while (sum > expNeededForLevelUp) {
+			if (sum > expNeededForLevelUp) {
+				long currentLevelValue = levelModel.getValue();
+				LevelModel nextLevel = levelRepo.findByValue(currentLevelValue + 1);
 
-			existingSkill.setExperience(sum - expNeededForLevelUp);
-			existingSkill.setLevelModel(nextLevel);
-		} else {
-			existingSkill.setExperience(sum);
+				existingSkill.setExperience(sum - expNeededForLevelUp);
+				existingSkill.setLevelModel(nextLevel);
+				sum = sum - expNeededForLevelUp;
+			} else {
+				existingSkill.setExperience(sum);
+				break;
+			}
 		}
 
 	}

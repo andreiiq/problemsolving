@@ -20,9 +20,9 @@
           rel="stylesheet">
 
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <script src="<c:url value="/resources/web/js/jquery-1.11.2.min.js"/>"></script>
+    <script src="<c:url value="/resources/web/js/bootstrap.min.js"/>"></script>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/web/css/bootstrap.min.css"/>">
     <script src="<c:url value="/resources/web/js/bootstrap-typeahead.min.js"/>"></script>
 
     <script src="<c:url value="/resources/custom/js/teacherPage.js"/>"></script>
@@ -46,10 +46,10 @@
 <div class="container-fluid pbs-profile">
     <div class="row">
             <div class="profile-picture col-lg-2 col-lg-offset-3">
-                <c:url value="/profile-image" var="profileImageURL"/>
-                <img id="profile-img"
-                     class="img-responsive center-block img-thumbnail"
-                     src="<c:url value="/resources/images/empty_profile.gif"/>"> <br>
+              <c:url value="/profile-image" var="profileImageURL" />
+				<img id="profile-img"
+					class="img-responsive center-block img-thumbnail"
+					src="<c:url value="/profile-image"/>"> <br>
             </div>
 			<div class="user-information col-lg-4">
 				<br>
@@ -76,7 +76,7 @@
                   <button id="view-my-projects" type="button"
                         class="list-group-item">View Projects
                   </button>
-                  <input class="current-page-number" type="hidden" name="page" value="0" />
+                  <input id="current-page-mynumber" type="hidden" name="page" value="0" />
                 </form:form>
                 <button id="search-projects" type="button"
                         class="list-group-item">Search Projects

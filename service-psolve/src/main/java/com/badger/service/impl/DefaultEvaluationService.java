@@ -23,10 +23,13 @@ public class DefaultEvaluationService implements EvaluationService {
 	}
 
 	@Override
-	public void evaluateTask(SubtaskModel taskModel, long grade) {
-		StudentModel student = taskModel.getStudent();
-
-		evaluationStrategy.evaluateStudent(student, taskModel, grade);
+	public void evaluateTask(SubtaskModel subtaskModel, long grade) {
+		StudentModel student = subtaskModel.getStudent();
+		if (student != null) {
+			evaluationStrategy.evaluateStudent(student, subtaskModel, grade);
+		} else {
+			evaluationStrategy.evaluateStudent(subtaskModel.getParentTask().getStudent(), subtaskModel, grade);
+		}
 
 	}
 

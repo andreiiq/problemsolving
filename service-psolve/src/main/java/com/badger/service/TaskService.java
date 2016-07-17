@@ -1,5 +1,7 @@
 package com.badger.service;
 
+import java.util.List;
+
 import com.psolve.model.AbstractTaskModel;
 import com.psolve.model.TaskModel;
 
@@ -13,7 +15,8 @@ public interface TaskService {
 	void saveTask(AbstractTaskModel task);
 
 	AbstractTaskModel findTaskByID(long id);
-	
+
 	void assignTaskToCurrentUser(TaskModel taskModel);
+
 
 }

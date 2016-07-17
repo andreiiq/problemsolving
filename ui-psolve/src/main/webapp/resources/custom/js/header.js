@@ -4,35 +4,33 @@ $(document).ready(function () {
 		checkForNewNotifications();
 		}, 10000);
 	
-	
-	$('.accept-invitation').on("click", function() {
-		   var form = $('#filter-search-form');
-	        $('#filter-search-results').empty();
-	        
-	        var action = form.attr('action');
-	        var method = form.attr('method');
-	        
-	        $.ajax({
-	            contentType: 'application/json; charset=utf-8',
-	            type: method,
-	            url: action,
-	            dataType: 'json',
-	            data: JSON.stringify(form.serializeObject()),
-	            success: function (data) {
-	            	console.log(data);
-	                for (var key in data.tasks) {
-	                    appendSearchResults(data.tasks[key]);
-	                }
-	                buildPageNavigation(data.numberOfPages, data.currentPage);
-	            },
-	            error: function () {
-	            }
-	        });
+	 $(document).on('click', '.accept-invitation', function() {
+		    event.preventDefault();	
+			   var href = $(this).attr("href");
+		        
+		        var menu = $(this).next(".scrollable-menu");
+		        
+		        if(menu.children().length > 0) {
+		        	menu.empty();
+		        }
+		        
+		        $.ajax({
+		            type: "GET",
+		            url: href,
+		            success: function (data) {
+		           	 $('.new-notifications-number').html("(0)");
+	               	 $('.notification-dropdown').click();
+		                            },
+		            error: function () {
+		            }
+		        });
 	});
 	
 	
-	$('.reject-invitation').on("click", function() {
-		   var action = $(this).attr('href');
+	$(document).on("click",'.reject-invitation', function(event) {
+		    event.preventDefault();	
+		   var href = $(this).attr("href");
+	        
 	        var menu = $(this).next(".scrollable-menu");
 	        
 	        if(menu.children().length > 0) {
@@ -40,16 +38,11 @@ $(document).ready(function () {
 	        }
 	        
 	        $.ajax({
-	            contentType: 'application/json; charset=utf-8',
 	            type: "GET",
-	            url: action,
-	            dataType: 'json',
-	            data: " ",
+	            url: href,
 	            success: function (data) {
-	            	   for (var key in data.notifications) {
-	            		   appendNotifications(data.notifications[key], menu);
-	                   }
-	               	 $('.new-notifications-number').html("");
+	               	 $('.new-notifications-number').html("(0)");
+	               	 $('.notification-dropdown').click();
 	                            },
 	            error: function () {
 	            }
@@ -79,7 +72,6 @@ $(document).ready(function () {
                 $.each(data, function(index, result) {
                     searchResults.append('<option value="'+ result.firstname +'">');
                 });
-                console.log(data);
             },
             error: function () {
             }
@@ -104,21 +96,32 @@ $(document).ready(function () {
             	   for (var key in data.notifications) {
             		   appendNotifications(data.notifications[key], menu);
                    }
-               	 $('.new-notifications-number').html("");
+               	 $('.new-notifications-number').html("(0)");
                             },
             error: function () {
             }
         });
     });
+    
+    
+    
     function appendNotifications(notification, menu) {
-    	menu.append('<li class="divider"></li><li><a class="dropdown-element">'+ notification.message +
-    	'<form:form class="accept-invitation" method="POST" action="/ui-psolve/search/filter">' +
-      	'<button type="button"class="add-new-skill btn btn-info btn-circle-sm">'+
-								'<i class="glyphicon glyphicon-ok-circle"></i>'+
-							'</button>'+
-							'<button type="button" class="btn btn-danger btn-circle-sm">'+
-								'<i class="glyphicon glyphicon-remove-circle"></i>'+
-							'</button></form:form></a></li>');
+    	var notificationQueryHTML = "";
+    	if(notification.status == "PENDING") {
+    	notificationQueryHTML = '<button href="'+ctx +'/acceptNotifiation?notificationID='+notification.notificationID+'" type="button"class="accept-invitation btn btn-info btn-circle-sm">'+
+		'<i class="glyphicon glyphicon-ok-circle"></i>'+
+		'</button>'+
+		'<button href="'+ctx +'/rejectNotification?notificationID='+notification.notificationID+'" type="button" class="reject-invitation btn btn-danger btn-circle-sm">'+
+			'<i class="glyphicon glyphicon-remove-circle"></i>'+
+		'</button>';
+    	}
+
+    	var message = notification.message.split(" ");
+    	
+    	message[message.length-1] ='<a class="project-button">'+
+    	''+ message[message.length-1] +'</a>';
+    	menu.append('  <li class="divider"></li><li><form role="form" class="form-inline" method="GET" action="'+ ctx +'/getTask"><input type="hidden" name="taskId" value="'+ notification.taskId +'">'+ message.join(" ") + notificationQueryHTML + '</form>');
+    	
     }
     function checkForNewNotifications() {
     	var url = ctx + "/countNotifications"

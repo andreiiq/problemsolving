@@ -35,6 +35,7 @@ public class DefaultUserService implements UserService {
 	@Autowired
 	private UserRepo<AbstractUserModel> userRepo;
 
+	@Autowired
 	private BuserFileManager fileManager;
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultUserService.class);

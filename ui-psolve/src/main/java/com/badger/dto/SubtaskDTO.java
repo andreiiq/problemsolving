@@ -7,6 +7,9 @@ public class SubtaskDTO {
 	private String title;
 	private String description;
 	private List<SkillDTO> skills;
+	private String owner;
+	private String mentor;
+	private double points;
 
 	public String getTitle() {
 		return title;
@@ -38,6 +41,30 @@ public class SubtaskDTO {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getMentor() {
+		return mentor;
+	}
+
+	public void setMentor(String mentor) {
+		this.mentor = mentor;
+	}
+
+	public double getPoints() {
+		return points;
+	}
+
+	public void setPoints(double points) {
+		this.points = points;
 	}
 	
 

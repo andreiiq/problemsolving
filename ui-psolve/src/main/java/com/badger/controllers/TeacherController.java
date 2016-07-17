@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.badger.form.SubtaskForm;
 import com.badger.form.TaskForm;
 import com.badger.inputmapper.TeacherInputMapper;
+import com.badger.service.CourseService;
 import com.badger.service.EvaluationService;
-import com.badger.service.SolutionService;
 import com.badger.service.TaskService;
 import com.badger.util.PageConstants;
 import com.psolve.model.SubtaskModel;
@@ -34,11 +34,20 @@ public class TeacherController {
 	@Autowired
 	EvaluationService evaluationService;
 
-	@RequestMapping(value = "/add-new-task", method = RequestMethod.POST)
+	@Autowired
+	CourseService courseService;
 
+	@RequestMapping(value = "/add-new-task", method = RequestMethod.POST)
 	public String addNewTask(TaskForm taskForm, BindingResult bindingResult, Model model) {
 		taskService.addNewProject(teacherInputMapper.parseAddTaskRequest(taskForm));
-		return PageConstants.PROFILE_PAGE;
+		model.addAttribute("courses", courseService.getCourses());
+		return "redirect:/teacher";
+	}
+
+	@RequestMapping(value = "/getCreateProjectForm", method = RequestMethod.GET)
+	public String resetCreateProjectForm(Model model) {
+		model.addAttribute("courses", courseService.getCourses());
+		return PageConstants.CREATE_PROJECT_PAGE;
 	}
 
 	@RequestMapping(value = "/create-task", method = RequestMethod.GET)
@@ -47,7 +56,9 @@ public class TeacherController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String getHomepage() {
+	public String getHomepage(Model model) {
+		model.addAttribute("courses", courseService.getCourses());
+
 		return PageConstants.TEAHCER_ADMINISTRATION;
 	}
 
@@ -56,8 +67,8 @@ public class TeacherController {
 	public ResponseEntity<String> evaluateStudent(@RequestBody TaskForm taskForm) {
 		TaskModel taskModel = (TaskModel) taskService.findTaskByID(taskForm.getId());
 		evaluationService.evaluateTask(taskModel, taskForm.getGrade());
-		
-		for(SubtaskForm subtaskForm : taskForm.getSubtasks()) {
+
+		for (SubtaskForm subtaskForm : taskForm.getSubtasks()) {
 			SubtaskModel subtaskModel = (SubtaskModel) taskService.findTaskByID(subtaskForm.getId());
 			evaluationService.evaluateTask(subtaskModel, subtaskForm.getGrade());
 		}

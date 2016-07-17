@@ -11,6 +11,8 @@ public interface PageConstants {
 	String PROFILE_PAGE = "pages/profilePage";
 
 	String TEAHCER_ADMINISTRATION = "pages/teacherPage";
+	String CREATE_PROJECT_PAGE = "pages/createProject";
+
 	
 	String STUDENT_PAGE_URL = "/";
 	String TEACHER_PAGE_URL = "/teacher/";

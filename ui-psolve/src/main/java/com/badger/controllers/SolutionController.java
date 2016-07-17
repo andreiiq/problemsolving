@@ -26,8 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.badger.dto.SolutionDTO;
 import com.badger.dto.TimeRangeDTO;
+import com.badger.service.NotificationService;
 import com.badger.service.SolutionService;
+import com.badger.service.TaskService;
 import com.psolve.model.SolutionModel;
+import com.psolve.model.TaskModel;
 
 @Controller
 public class SolutionController {
@@ -35,13 +38,21 @@ public class SolutionController {
 	@Autowired
 	SolutionService solutionService;
 
+	@Autowired
+	NotificationService notificationService;
+
+	@Autowired
+	TaskService taskService;
+
 	@RequestMapping(value = "/uploadSolution", method = RequestMethod.POST)
 	public ResponseEntity<String> uploadSolution(@RequestParam MultipartFile file, @RequestParam long taskId) {
 		try {
+			TaskModel taskModel = (TaskModel) taskService.findTaskByID(taskId);
 
 			byte[] fileContent = file.getBytes();
 
 			solutionService.uploadSolution(fileContent, taskId);
+			notificationService.sendSubmitSolutionNotification(taskModel.getTeacherModel().getEmail(), taskId);
 
 		} catch (IOException ioe) {
 			// TO-DO Exception
@@ -51,13 +62,13 @@ public class SolutionController {
 
 	}
 
-	@RequestMapping(value = "/teacher/downloadSolution/{fileName}", method = RequestMethod.GET, produces = "application/x-rar-compressed")
+	@RequestMapping(value = "/downloadSolution/{fileName}", method = RequestMethod.GET, produces = "application/x-rar-compressed")
 	@ResponseBody
 	public FileSystemResource getFile(@PathVariable("fileName") long fileName, HttpServletResponse response) {
-
+		TaskModel taskModel = (TaskModel) taskService.findTaskByID(fileName);
 		response.setContentType("application/x-rar-compressed");
 		response.setHeader("Content-Disposition", "filename=solution.rar");
-		return new FileSystemResource(solutionService.getSolutionPath(fileName));
+		return new FileSystemResource(solutionService.getSolutionPath(taskModel.getSolutionModel().getId()));
 	}
 
 	@ResponseBody
@@ -76,13 +87,11 @@ public class SolutionController {
 			SolutionDTO solutionDTO = new SolutionDTO();
 
 			solutionDTO.setProjectName(solution.getTask().getTitle());
-			solutionDTO.setId(solution.getId());
+			solutionDTO.setId(solution.getTask().getId());
 
 			Calendar uploadTime = solution.getUploadTime();
 			TimeRangeDTO weekRange = getSolutionSubmitedWeek(uploadTime);
-			System.out.println(weekRange.getWeekOfYear());
 			if (solutions.containsKey(weekRange)) {
-				System.out.println("intra");
 				List<SolutionDTO> solutionDTOs = solutions.get(weekRange);
 				solutionDTOs.add(solutionDTO);
 			} else {
@@ -100,7 +109,7 @@ public class SolutionController {
 	private TimeRangeDTO getSolutionSubmitedWeek(Calendar uploadTime) {
 		TimeRangeDTO timeRangeDTO = new TimeRangeDTO();
 
-		int weekNumber = uploadTime.get(Calendar.WEEK_OF_YEAR) - 1;
+		int weekNumber = uploadTime.get(Calendar.WEEK_OF_YEAR);
 		LocalDate week = LocalDate.now().with(ChronoField.ALIGNED_WEEK_OF_YEAR, weekNumber);
 
 		LocalDate start = week.with(DayOfWeek.MONDAY);
